@@ -1,6 +1,7 @@
 
-
-#include "FiniteField.h"
+#include <cmath>
+//#include "FiniteField.h"
+#include "ncutils.h"
 
 #define null 0
 
@@ -21,20 +22,6 @@ int ipow(int base, int exp)
 
 		return result;
 }
-
-
-///**
-// * Returns the default finite field
-// *
-// * @return a finite field
-// */
-//FiniteField* FiniteField::getDefaultFiniteField() {
-//	if (defaultFiniteField == null){
-//		 defaultFiniteField = new FiniteField(2,4);
-//	}
-//	return defaultFiniteField;
-//}
-
 
 /**
  * Constructs a new extension field
@@ -173,58 +160,102 @@ FiniteField::FiniteField(int q) {
 
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////
+///**
+// * Convert a byte array to its finite field vector representation, this method
+// * creates a vector with as many coordinates as they can be read from the byte
+// * array
+// *
+// * @param bytes an array of bytes
+// * @return the representation of the array as a vector
+// */
+//public FiniteFieldVector byteToVector(char *bytes) {
+//	return byteToVector(bytes, coordinatesCount(bytes.length));
+//}
+//
+//
+///**
+// * Convert a byte array to its finite field vector representation
+// *
+// * @param bytes an array of bytes
+// * @param coordinates how many coordinates should be read
+// * @return the representation of the array as a vector
+// */
+//public FiniteFieldVector byteToVector(byte [] bytes, int coordinates) {
+//	return byteToVector(bytes, 0, bytes.length, coordinates);
+//}
+//
+///**
+// * Convert a byte array to its finite field vector representation
+// *
+// * @param bytes an array of bytes
+// * @param offset the offset of the first byte to be converted
+// * @param length the number of bytes that must be converted
+// * @return the representation of the array as a vector
+// */
+//FiniteFieldVector byteToVector(byte bytes, int offset, int length, int coordinates) {
+//
+//	int [] data = new int[coordinates];
+//
+//	int bitsPerField = bitsPerCoordinate();
+//
+//	for ( int i = 0 ; i < coordinates; i++) {
+//		data[i] = readBits(bytes, offset, i, bitsPerField);
+//	}
+//
+//    return new FiniteFieldVector(data, this);
+//
+//}
+//
+//FiniteFieldVector byteToVector(byte  bytes, int offset, int length) {
+//	return byteToVector(bytes, offset, length, coordinatesCount(bytes.length));
+//}
 
+/////////////////////////////////
 
+//FiniteFieldVector byteToVector(char *byte, int byte_length) {
+//
+//	//return byteToVector(bytes, coordinatesCount(bytes.length));
+//	//return byteToVector(bytes, 0, bytes.length, coordinates);
+//
+//	coordinates = coordinatesCount(bytes.length);
+//
+//	// data sarà il mio vettore all'interno di finitefieldvector
+//	int data = new int[coordinates];
+//
+//	// bit interni a un elemento di coordinates
+//	int bitsPerField = bitsPerCoordinate();
+//
+//	// per ogni elemento del vettore
+//	for ( int i = 0 ; i < coordinates; i++) {
+//		//inserisci in ogni campo m bit
+//		data[i] = readBits(bytes, offset, i, bitsPerField);
+//	}
+//
+//	//restutuisci il vettore creato
+//    return new FiniteFieldVector(data, datalenght, this);
+//
+//}
+//
+//int readBits(byte* data, int offset, int field, int fieldSize) {
+//
+//	int start_bit, end_bit, i;
+//	int ret;
+//
+//	start_bit = field * fieldSize;
+//	end_bit = ( field + 1) * fieldSize;
+//
+//	ret = 0;
+//
+//	for (i = start_bit; i < end_bit; i++) {
+//			ret = (ret << 1 ) | ( (data[i / 8+offset] >> ( i%8)) & 0x1);
+//	}
+//
+//	return ret % Q;
+//
+//}
 
-//
-//    /**
-//     * Convert a byte array to its finite field vector representation, this method
-//     * creates a vector with as many coordinates as they can be read from the byte
-//     * array
-//     *
-//     * @param bytes an array of bytes
-//     * @return the representation of the array as a vector
-//     */
-//    public FiniteFieldVector byteToVector(byte [] bytes) {
-//    	return byteToVector(bytes, coordinatesCount(bytes.length));
-//    }
-//
-//    /**
-//     * Convert a byte array to its finite field vector representation
-//     *
-//     * @param bytes an array of bytes
-//     * @param coordinates how many coordinates should be read
-//     * @return the representation of the array as a vector
-//     */
-//    public FiniteFieldVector byteToVector(byte [] bytes, int coordinates) {
-//    	return byteToVector(bytes, 0, bytes.length, coordinates);
-//    }
-//
-//    FiniteFieldVector byteToVector(byte [] bytes, int offset, int length) {
-//    	return byteToVector(bytes, offset, length, coordinatesCount(bytes.length));
-//    }
-//
-//    /**
-//     * Convert a byte array to its finite field vector representation
-//     *
-//     * @param bytes an array of bytes
-//     * @param offset the offset of the first byte to be converted
-//     * @param length the number of bytes that must be converted
-//     * @return the representation of the array as a vector
-//     */
-//    public FiniteFieldVector byteToVector(byte [] bytes, int offset, int length, int coordinates) {
-//
-//    	int [] data = new int[coordinates];
-//
-//    	int bitsPerField = bitsPerCoordinate();
-//
-//    	for ( int i = 0 ; i < coordinates; i++) {
-//    		data[i] = readBits(bytes, offset, i, bitsPerField);
-//    	}
-//
-//        return new FiniteFieldVector(data, this);
-//
-//    }
+//////////////////////////////////////////////////////////////////////////////////////
 //
 //    /**
 //     * Convert a vector to its byte array representation
@@ -259,23 +290,7 @@ FiniteField::FiniteField(int q) {
 //
 //    }
 //
-//    private int readBits(byte[] data, int offset, int field, int fieldSize) {
-//
-//        int start_bit, end_bit, i;
-//        int ret;
-//
-//        start_bit = field * fieldSize;
-//        end_bit = ( field + 1) * fieldSize;
-//
-//        ret = 0;
-//
-//        for (i = start_bit; i < end_bit; i++) {
-//                ret = (ret << 1 ) | ( (data[i / 8+offset] >> ( i%8)) & 0x1);
-//        }
-//
-//        return ret % Q;
-//
-//    }
+
 //
 //    void vectorToBytes (FiniteFieldVector vector, byte [] output, int start) {
 //
@@ -290,48 +305,62 @@ FiniteField::FiniteField(int q) {
 //    }
 //
 //
-//    /**
-//     * Returns the number of bytes that can be represented with a given number
-//     * of coordinates
-//     *
-//     * @param coordinatesCount  the number of
-//     * @return the number of bytes
-//     */
-//    public int bytesLength(int coordinatesCount) {
-//
-//    	int bitsPerCoordinate = bitsPerCoordinate();
-//
-//    	return (int) Math.ceil(((double) (coordinatesCount * bitsPerCoordinate)) / 8.0);
-//
-//    }
-//
-//    /**
-//     * Returns the number of bits necessary to represent an element of the field
-//     *
-//     * @return the number of bits necessary to store a field element
-//     */
-//
-//	public int bitsPerCoordinate() {
-//		int bitsPerCoordinate = (int) Math.ceil(Math.log(Q) / Math.log(2));
-//		return bitsPerCoordinate;
-//	}
-//
-//    /**
-//     * Returns the number of coordinates that can be represented with a given
-//     * number of bytes
-//     *
-//     * @param bytesLength the number of bytes
-//     * @return the number of bytes
-//     */
-//    public int coordinatesCount(int bytesLength) {
-//
-//    	int bitsPerCoordinate = bitsPerCoordinate();
-//
-//    	return bytesLength * 8 / bitsPerCoordinate;
-//
-//    }
-//
-//
+
+
+
+
+
+/**
+ * Returns the number of bytes that can be represented with a given number
+ * of coordinates
+ *
+ * @param coordinatesCount  the number of
+ * @return the number of bytes
+ */
+int FiniteField::bytesLength(int coordinates_count) {
+
+	int bits_per_coordinate = bitsPerCoordinate();
+
+	//return (int) Math.ceil(((double) (coordinates_count * bits_per_coordinate)) / 8.0);
+
+	return int(ceil((coordinates_count * bits_per_coordinate)/ 8.0)  );
+}
+
+
+
+/**
+ * Returns the number of bits necessary to represent an element of the field
+ *
+ * @return the number of bits necessary to store a field element
+ */
+
+int FiniteField::bitsPerCoordinate() {
+
+	//int bitsPerCoordinate = (int) Math.ceil(Math.log(Q) / Math.log(2));
+
+	int bits_per_coordinate = int(log(double(Q))/log(2.0));
+
+	return bits_per_coordinate;
+}
+
+
+
+/**
+ * Returns the number of coordinates that can be represented with a given
+ * number of bytes
+ *
+ * @param bytesLength the number of bytes
+ * @return the number of bytes
+ */
+int FiniteField::coordinatesCount(int bytes_length) {
+
+	int bits_per_coordinate = bitsPerCoordinate();
+
+	return bytes_length * 8 / bits_per_coordinate;
+
+}
+
+
 
 /**
  * Return the cardinality of the field
@@ -340,6 +369,8 @@ FiniteField::FiniteField(int q) {
 int FiniteField::getCardinality() {
 	return Q;
 }
+
+
 //
 //    @Override
 //    public boolean equals(Object obj) {

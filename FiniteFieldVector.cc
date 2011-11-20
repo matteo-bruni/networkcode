@@ -1,8 +1,11 @@
 
-#include "FiniteFieldVector.h"
 #include <assert.h>
 #include <memory.h>
+#include <string>
+#include <sstream>
 
+//#include "FiniteFieldVector.h"
+#include "ncutils.h"
 
 /**
  * Constructs a vector
@@ -189,6 +192,18 @@ void FiniteFieldVector::multiplyAndAddInPlace(int c, FiniteFieldVector& other) {
 
 }
 
+std::string FiniteFieldVector::toString() {
+		std::string ret;
+		for ( int i = 0 ; i < this->length ; i++ ) {
+				std::ostringstream oss;
+				oss << coordinates[i];
+				ret += " "+ oss.str();
+				//ret += (ret.length() != 0 ? " " : "") + String.format("%02d ", c); ;
+		}
+
+		return ret;
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -222,14 +237,7 @@ void FiniteFieldVector::multiplyAndAddInPlace(int c, FiniteFieldVector& other) {
 //                return true;
 //        }
 //
-//        @Override
-//    public String toString() {
-//            String ret = "";
-//            for (int c : coordinates) {
-//                    ret += (ret.length() != 0 ? " " : "") + String.format("%02d ", c); ;
-//            }
-//            return ret;
-//    }
+
 //
 //
 //}
