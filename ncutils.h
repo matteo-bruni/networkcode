@@ -37,7 +37,7 @@ class FiniteField {
 
 
 		FiniteField(int q=2, int m=4);
-		FiniteField(int q);
+		FiniteField(int total_size);
 
 //		FiniteFieldVector byteToVector(unsigned char *bytes, int bytes_lenght);
 //		FiniteFieldVector byteToVector(unsigned char *bytes, int bytes_lenght, int coordinates);

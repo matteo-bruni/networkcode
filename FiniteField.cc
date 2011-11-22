@@ -117,9 +117,9 @@ FiniteField::FiniteField(int q, int m) {
  * @param q the prime used to define the field
  */
 
-FiniteField::FiniteField(int q) {
+FiniteField::FiniteField(int total_size) {
 
-	Q = q;
+	Q = total_size;
 
 	// TODO: check size
 	//if (q < 1) throw new RuntimeException("Invalid field size");
