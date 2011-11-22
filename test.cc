@@ -7,7 +7,7 @@
 
 int main() {
 
-    unsigned char payload[10] = {0xa0, 0xb1, 0xc2,0x53,0x4,0x5,0x6, 0x7, 0x8, 0xff};
+    unsigned char payload[10] = {0xa0, 0xb1, 0xc2,0x53,0x4,0x5,0x6, 0x7, 0x8, 0xac};
 
 
     printf("\n\n Hex representation \n <  ");
@@ -52,6 +52,53 @@ int main() {
 
     }
     printf("\n\n");
+
+
+    printf("getting back the payload from the vector \n");
+
+    unsigned char* back = field->vectorToBytes(vector) ;
+
+
+    printf("\n\n Hex representation \n <  ");
+    for ( int i=0 ; i<10; i++){
+    	if ( i == 9 ){
+        	printf(" %x >", back[i]);
+    	} else {
+        	printf(" %x, ", back[i]);
+    	}
+
+    }
+    printf("\n\n");
+
+
+    printf(" Bit representation \n <  ");
+    for ( int i=0 ; i<10; i++){
+    	if ( i == 9 ){
+    		std::cout << std::bitset<8>(back[i])<< " >" << std::endl;
+    	} else {
+    		std::cout << std::bitset<8>(back[i])<< ", ";
+    	}
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	return 0;
 }
