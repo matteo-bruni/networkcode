@@ -1,89 +1,92 @@
+#include "ncutils.h"
+#include <memory.h>
 
 
 
-
-
-
-
-
-
-//package ch.epfl.arni.ncutils;
-//
-//import java.util.Arrays;
-//
+// TODO: non sembra mai usato
 ///**
+// * Constructs a new UncodedPacket with the specified id and payload
+// * The uncoded packet contains a reference to the payload therefore
+// * any change to the array payload will be reflected in the contents
+// * of the uncoded packet.
 // *
-// * This class represents an uncoded packet. An uncoded packet
-// * has an unique ID and a payload represented by a byte array.
-// *
-// * @author lokeller
+// * @param id the id of the packet
+// * @param payload the payload
 // */
-//public class UncodedPacket implements Comparable<UncodedPacket> {
+//public static UncodedPacket wrap(int id, byte[] payload) {
+//	UncodedPacket pkt = new UncodedPacket(id);
+//	pkt.payload = payload;
+//	return pkt;
+//}
+
+
+
+UncodedPacket::UncodedPacket(int id) {
+	this->id = id;
+}
+
+/**
+ * Constructs a new UncodedPacket with the specified id and payload
+ *
+ * @param id the id of the packet
+ * @param payload the payload
+ */
+UncodedPacket::UncodedPacket(int id, unsigned char* payload, int length) {
+	this->id = id;
+	this->payload = new unsigned char[length];
+	memcpy(this->payload, payload, length);
+	this->payload_length = length;
+}
+
+
+// TODO: serve vectortobytes
+///**
+// * Creates an uncoded packet with the specified Id and as payload the
+// * byte array representation ( see FiniteField.vectorToBytes ) of a
+// *  given vector
+// *
+// * @param id the id of the packet
+// * @param payload a vector that will be the payload
+// */
+//UncodedPacket::UncodedPacket(int id, FiniteFieldVector& payload) {
 //
-//    private int id;
-//    private byte[] payload;
+//	this->id = id;
+//	this->payload = payload.getFiniteField().vectorToBytes(payload);
 //
-//    /**
-//     * Constructs a new UncodedPacket with the specified id and payload
-//     * The uncoded packet contains a reference to the payload therefore
-//     * any change to the array payload will be reflected in the contents
-//     * of the uncoded packet.
-//     *
-//     * @param id the id of the packet
-//     * @param payload the payload
-//     */
-//    public static UncodedPacket wrap(int id, byte[] payload) {
-//        UncodedPacket pkt = new UncodedPacket(id);
-//        pkt.payload = payload;
-//        return pkt;
-//    }
-//
-//    private UncodedPacket(int id) {
-//        this.id = id;
-//    }
-//
-//    /**
-//     * Constructs a new UncodedPacket with the specified id and payload
-//     *
-//     * @param id the id of the packet
-//     * @param payload the payload
-//     */
-//    public UncodedPacket(int id, byte[] payload) {
-//        this.id = id;
-//        this.payload = Arrays.copyOf(payload, payload.length);
-//    }
-//
-//    /**
-//     * Creates an uncoded packet with the specified Id and as payload the
-//     * byte array representation ( see FiniteField.vectorToBytes ) of a
-//     *  given vector
-//     *
-//     * @param id the id of the packet
-//     * @param payload a vector that will be the payload
-//     */
-//    public UncodedPacket(int id, FiniteFieldVector payload) {
-//
-//        this.id = id;
-//        this.payload = payload.getFiniteField().vectorToBytes(payload);
-//
-//    }
-//
-//    /**
-//     * Returns the id of the packet
-//     * @return the id of the packet
-//     */
-//    public int getId() {
-//        return id;
-//    }
-//
-//    /**
-//     * Returns the payload of the packet
-//     *
-//     * @return the byte array that contains the payload of the packet
-//     */
-//    public byte[] getPayload() {
-//        return payload;
-//    }
+//}
+
+/**
+ * Returns the id of the packet
+ * @return the id of the packet
+ */
+int UncodedPacket::getId() {
+	return this->id;
+}
+
+
+
+/**
+ * Returns the payload of the packet
+ *
+ * @return the byte array that contains the payload of the packet
+ */
+unsigned char* UncodedPacket::getPayload() {
+	return payload;
+}
+int UncodedPacket::getPayloadLength(){
+	return payload_length;
+}
+
+UncodedPacket* UncodedPacket::copy() {
+
+	UncodedPacket* copy = new UncodedPacket(id, new unsigned char[payload_length], payload_length);
+	memcpy(copy->payload, payload, payload_length);
+
+	return copy;
+}
+
+
+
 //
 //    @Override
 //    public String toString() {
@@ -95,13 +98,7 @@
 //        return ret;
 //    }
 //
-//	public UncodedPacket copy() {
-//		UncodedPacket copy = new UncodedPacket(this.id, new byte[payload.length]);
-//
-//		System.arraycopy(payload, 0, copy.payload, 0, payload.length);
-//
-//		return copy;
-//	}
+
 //
 //	@Override
 //	public int hashCode() {

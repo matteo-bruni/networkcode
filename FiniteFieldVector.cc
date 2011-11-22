@@ -13,13 +13,13 @@
  * @param length the number of coordinates of the vector
  * @param ff the finite field used to define the vector
  */
-FiniteFieldVector::FiniteFieldVector(int length, const FiniteField& field) {
+FiniteFieldVector::FiniteFieldVector(int length, FiniteField* field) {
 	ff = field;
 	coordinates = new int[length];
 	this->length = length;
 }
 
-FiniteFieldVector::FiniteFieldVector(int coords[], int coords_len, const FiniteField& field) {
+FiniteFieldVector::FiniteFieldVector(int coords[], int coords_len, FiniteField* field) {
 	ff = field;
 	coordinates = coords;
 	this->length = coords_len;
@@ -40,7 +40,7 @@ int FiniteFieldVector::getLength() {
  *
  * @return a finite field
  */
-FiniteField FiniteFieldVector::getFiniteField() {
+FiniteField* FiniteFieldVector::getFiniteField() {
 	return ff;
 }
 
@@ -54,7 +54,7 @@ FiniteField FiniteFieldVector::getFiniteField() {
 void FiniteFieldVector::setCoordinate(int index, int value) {
 
 	assert(index >= 0);
-	assert(value < ff.getCardinality() && value >= 0);
+	assert(value < ff->getCardinality() && value >= 0);
 	assert(index <= length);
 
 	coordinates[index] = value;
@@ -111,14 +111,14 @@ FiniteFieldVector* FiniteFieldVector::copy() {
  */
 FiniteFieldVector* FiniteFieldVector::add(FiniteFieldVector& vector) {
 
-	assert(vector.getFiniteField().getCardinality() == ff.getCardinality());
+	assert(vector.getFiniteField()->getCardinality() == ff->getCardinality());
 	assert(vector.length == this->length);
 
 	FiniteFieldVector *out = new FiniteFieldVector(getLength(), ff);
 
 
 	for ( int i = 0 ; i < this->length ; i++ ) {
-		out->coordinates[i] = ff.sum[this->coordinates[i]][vector.coordinates[i]];
+		out->coordinates[i] = ff->sum[this->coordinates[i]][vector.coordinates[i]];
 	}
 
 	return out;
@@ -127,11 +127,11 @@ FiniteFieldVector* FiniteFieldVector::add(FiniteFieldVector& vector) {
 
 void FiniteFieldVector::addInPlace(FiniteFieldVector& vector) {
 
-	assert(vector.getFiniteField().getCardinality() == ff.getCardinality());
+	assert(vector.getFiniteField()->getCardinality() == ff->getCardinality());
 	assert(vector.length == this->length);
 
 	for ( int i = 0 ; i < this->length ; i++ ) {
-		coordinates[i] = ff.sum[coordinates[i]][vector.coordinates[i]];
+		coordinates[i] = ff->sum[coordinates[i]][vector.coordinates[i]];
 	}
 
 }
@@ -145,12 +145,12 @@ void FiniteFieldVector::addInPlace(FiniteFieldVector& vector) {
  */
 FiniteFieldVector* FiniteFieldVector::scalarMultiply(int c) {
 
-	assert(c < ff.getCardinality() && c >= 0);
+	assert(c < ff->getCardinality() && c >= 0);
 
 	FiniteFieldVector *out = new FiniteFieldVector(getLength(), ff);
 
 	for ( int i = 0 ; i < this->length ; i++ ) {
-		out->coordinates[i] = ff.mul[coordinates[i]][c];
+		out->coordinates[i] = ff->mul[coordinates[i]][c];
 	}
 	return out;
 }
@@ -158,21 +158,21 @@ FiniteFieldVector* FiniteFieldVector::scalarMultiply(int c) {
 
 void FiniteFieldVector::scalarMultiplyInPlace(int c) {
 	for ( int i = 0 ; i < this->length ; i++ ) {
-		coordinates[i] = ff.mul[coordinates[i]][c];
+		coordinates[i] = ff->mul[coordinates[i]][c];
 	}
 }
 
 
 FiniteFieldVector* FiniteFieldVector::multiplyAndAdd(int c, FiniteFieldVector& other) {
 
-	assert(other.getFiniteField().getCardinality() == ff.getCardinality());
+	assert(other.getFiniteField()->getCardinality() == ff->getCardinality());
 	assert(other.length == this->length);
-	assert(c < ff.getCardinality() && c >= 0);
+	assert(c < ff->getCardinality() && c >= 0);
 
 	FiniteFieldVector* out = new FiniteFieldVector(getLength(), ff);
 
 	for ( int i = 0 ; i < this->length ; i++ ) {
-		out->coordinates[i] = ff.sum[ff.mul[other.coordinates[i]][c]][coordinates[i]];
+		out->coordinates[i] = ff->sum[ff->mul[other.coordinates[i]][c]][coordinates[i]];
 	}
 
 	return out;
@@ -183,11 +183,11 @@ FiniteFieldVector* FiniteFieldVector::multiplyAndAdd(int c, FiniteFieldVector& o
 
 void FiniteFieldVector::multiplyAndAddInPlace(int c, FiniteFieldVector& other) {
 
-	assert(other.getFiniteField().getCardinality() == ff.getCardinality());
+	assert(other.getFiniteField()->getCardinality() == ff->getCardinality());
 	assert(other.length == this->length);
 
 	for ( int i = 0 ; i < this->length ; i++ ) {
-		coordinates[i] = ff.sum[ff.mul[other.coordinates[i]][c]][coordinates[i]];
+		coordinates[i] = ff->sum[ff->mul[other.coordinates[i]][c]][coordinates[i]];
 	}
 
 }

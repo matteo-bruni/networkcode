@@ -1,32 +1,30 @@
+#include "ncutils.h"
 
 
 
 
+ /*
+ * Create a new coded packet containing only one uncoded packet. The
+ * coding vector of this packet is an elementary vector, i.e. all entries
+ * but one, corresponding to the uncoded packet id, are zero.
+ *
+ * @param packet the uncoded packet that will be put in the coded packet
+ * @param maxPackets the maximal number of uncoded packets that can be combined
+ * in this coded packet. This correspond to the length of teh coding vector.
+ * @param ff The finite field that over which the vectors in the packet are
+ * defined
+ */
+CodedPacket::CodedPacket( UncodedPacket packet, int maxPackets, FiniteField* ff) {
 
+	//this( new FiniteFieldVector(maxPackets, ff), ff.byteToVector(packet.getPayload()));
 
-//public class CodedPacket {
-//
-//    private FiniteFieldVector codingVector;
-//    private FiniteFieldVector payloadVector;
-//
-//    /**
-//     *
-//     * Create a new coded packet containing only one uncoded packet. The
-//     * coding vector of this packet is an elementary vector, i.e. all entries
-//     * but one, corresponding to the uncoded packet id, are zero.
-//     *
-//     * @param packet the uncoded packet that will be put in the coded packet
-//     * @param maxPackets the maximal number of uncoded packets that can be combined
-//     * in this coded packet. This correspond to the length of teh coding vector.
-//     * @param ff The finite field that over which the vectors in the packet are
-//     * defined
-//     */
-//    public CodedPacket( UncodedPacket packet, int maxPackets, FiniteField ff) {
-//
-//        this( new FiniteFieldVector(maxPackets, ff), ff.byteToVector(packet.getPayload()));
-//
-//        codingVector.coordinates[packet.getId()] = 1;
-//    }
+	this->coding_vector = new FiniteFieldVector(maxPackets, ff) ;
+	//TODO: manca bytetovector
+	this->payload_vector = ff->byteToVector(packet.getPayload());
+
+	this->coding_vector->setCoordinate(packet.getId(), 1);
+}
+
 //
 //    /**
 //     * Creates an empty coded packet, i.e. the coding vector is set to the zero
@@ -69,10 +67,12 @@
 //
 //    }
 //
-//    private CodedPacket(FiniteFieldVector codingVector, FiniteFieldVector payloadVector) {
-//        this.codingVector = codingVector;
-//        this.payloadVector = payloadVector;
-//    }
+
+//CodedPacket::CodedPacket(FiniteFieldVector codingVector, FiniteFieldVector payloadVector) {
+//	this.codingVector = codingVector;
+//	this.payloadVector = payloadVector;
+//}
+
 //
 //
 //    /**

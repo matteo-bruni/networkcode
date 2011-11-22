@@ -38,12 +38,18 @@ class FiniteField {
 		FiniteField(int q=2, int m=4);
 		FiniteField(int q);
 
-		FiniteFieldVector byteToVector(char *bytes);
+		FiniteFieldVector* byteToVector(unsigned char *bytes);
 
 		int bytesLength(int coordinates_count);
 		int bitsPerCoordinate();
 		int coordinatesCount(int bytes_length);
 		int getCardinality();
+		//vectorToBytes (FiniteFieldVector vector, char* output, int start);
+
+		FiniteFieldVector byteToVector(unsigned char *bytes, int bytes_lenght);
+		FiniteFieldVector byteToVector(unsigned char *bytes, int bytes_lenght, int coordinates);
+		FiniteFieldVector byteToVector(unsigned char *bytes, int offset, int bytes_lenght, int coordinates);
+
 
 
 	private:
@@ -59,17 +65,18 @@ class FiniteFieldVector {
 
 	public:
 
-		FiniteFieldVector(int len, const FiniteField& ff);
-		FiniteFieldVector(int coords[], int len, const FiniteField& field);
+		FiniteFieldVector(int len, FiniteField* ff);
+		FiniteFieldVector(int coords[], int len, FiniteField* field);
 
 		int getLength();
-		FiniteField getFiniteField();
+		FiniteField* getFiniteField();
 
 		void setCoordinate(int index, int value);
 		int getCoordinate(int index);
 		void setToZero();
 
 		FiniteFieldVector* copy();
+
 		FiniteFieldVector* add(FiniteFieldVector& vector);
 		void addInPlace(FiniteFieldVector& vector);
 
@@ -86,6 +93,74 @@ class FiniteFieldVector {
 	private:
 		int *coordinates;
 		int length;
-		FiniteField ff ;
+		FiniteField* ff ;
 
 };
+
+
+class UncodedPacket {
+
+	public:
+
+		static UncodedPacket wrap(int id, unsigned char *payload, int length);
+		UncodedPacket(int id, unsigned char *payload, int length);
+		UncodedPacket(int id, FiniteFieldVector& payload);
+
+		int getId();
+		unsigned char* getPayload();
+		int getPayloadLength();
+		UncodedPacket* copy();
+		int compareTo(UncodedPacket o);
+
+	private:
+
+		int id;
+		unsigned char* payload;
+		int payload_length;
+		UncodedPacket(int id);
+
+
+
+};
+
+class CodedPacket {
+
+	public:
+
+		CodedPacket( UncodedPacket packet, int maxPackets, FiniteField* ff);
+		CodedPacket(int maxPackets, int payloadByteLen, FiniteField ff);
+		CodedPacket(int maxPackets, unsigned char* data, int offset, int length, FiniteField ff);
+
+		FiniteFieldVector getCodingVector();
+		FiniteFieldVector getPayload();
+		FiniteField getFiniteField();
+		void setCoordinate(int index, int value);
+		int getCoordinate(int index);
+		CodedPacket copy();
+		void setToZero();
+		CodedPacket add(CodedPacket vector);
+		void  addInPlace(CodedPacket vector);
+		CodedPacket scalarMultiply(int c);
+		void scalarMultiplyInPlace(int c);
+		CodedPacket multiplyAndAdd(int c, CodedPacket packet);
+		void  multiplyAndAddInPlace(int c, CodedPacket other);
+		unsigned char* toByteArray();
+		std::string toString();
+
+	private:
+		FiniteFieldVector* coding_vector;
+		FiniteFieldVector* payload_vector;
+		CodedPacket(FiniteFieldVector codingVector, FiniteFieldVector payloadVector);
+
+
+
+
+
+
+};
+
+
+
+
+
+
