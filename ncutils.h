@@ -1,6 +1,7 @@
 
 #include <string>
 
+// TODO: DISTRUTTORI VARI!!!!
 
 int ipow(int base, int exp);
 
@@ -38,19 +39,21 @@ class FiniteField {
 		FiniteField(int q=2, int m=4);
 		FiniteField(int q);
 
-		FiniteFieldVector* byteToVector(unsigned char *bytes);
+//		FiniteFieldVector byteToVector(unsigned char *bytes, int bytes_lenght);
+//		FiniteFieldVector byteToVector(unsigned char *bytes, int bytes_lenght, int coordinates);
+//		FiniteFieldVector byteToVector(unsigned char *bytes, int offset, int bytes_lenght, int coordinates);
+
+		FiniteFieldVector* byteToVector(unsigned char *bytes, int bytes_lenght, int offset = 0);
+		int readBits(unsigned char* data, int data_lenght, int offset, int field, int fieldSize);
+
+		unsigned char* vectorToBytes(FiniteFieldVector* vector);
+		void vectorToBytes (FiniteFieldVector* vector, unsigned char* output, int start);
+		void writeBits(unsigned char* data, int offset, int field, int value, int fieldSize);
 
 		int bytesLength(int coordinates_count);
 		int bitsPerCoordinate();
 		int coordinatesCount(int bytes_length);
 		int getCardinality();
-		//vectorToBytes (FiniteFieldVector vector, char* output, int start);
-
-		FiniteFieldVector byteToVector(unsigned char *bytes, int bytes_lenght);
-		FiniteFieldVector byteToVector(unsigned char *bytes, int bytes_lenght, int coordinates);
-		FiniteFieldVector byteToVector(unsigned char *bytes, int offset, int bytes_lenght, int coordinates);
-
-
 
 	private:
 		/**

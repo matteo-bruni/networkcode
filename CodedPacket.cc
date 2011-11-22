@@ -11,18 +11,19 @@
  * @param packet the uncoded packet that will be put in the coded packet
  * @param maxPackets the maximal number of uncoded packets that can be combined
  * in this coded packet. This correspond to the length of teh coding vector.
- * @param ff The finite field that over which the vectors in the packet are
+ * @param ff The finite fielconstructor ‘CodedPacket::CodedPacket(UncodedPacket, int, FiniteField*)’:
+ * d that over which the vectors in the packet are
  * defined
  */
 CodedPacket::CodedPacket( UncodedPacket packet, int maxPackets, FiniteField* ff) {
-
-	//this( new FiniteFieldVector(maxPackets, ff), ff.byteToVector(packet.getPayload()));
-
-	this->coding_vector = new FiniteFieldVector(maxPackets, ff) ;
-	//TODO: manca bytetovector
-	this->payload_vector = ff->byteToVector(packet.getPayload());
-
-	this->coding_vector->setCoordinate(packet.getId(), 1);
+//
+//	//this( new FiniteFieldVector(maxPackets, ff), ff.byteToVector(packet.getPayload()));
+//
+//	this->coding_vector = new FiniteFieldVector(maxPackets, ff) ;
+//	//TODO: manca bytetovector
+//	this->payload_vector = ff->byteToVector(packet.getPayload());
+//
+//	this->coding_vector->setCoordinate(packet.getId(), 1);
 }
 
 //

@@ -166,40 +166,14 @@ FiniteField::FiniteField(int q) {
  * array
  *
  * @param bytes an array of bytes
- * @return the representation of the array as a vector
- */
-FiniteFieldVector FiniteField::byteToVector(unsigned char *bytes, int bytes_lenght) {
-
-	return byteToVector(bytes, bytes_lenght, coordinatesCount(bytes_lenght));
-
-}
-
-
-/**
- * Convert a byte array to its finite field vector representation
- *
- * @param bytes an array of bytes
- * @param coordinates how many coordinates should be read
- * @return the representation of the array as a vector
- */
-FiniteFieldVector FiniteField::byteToVector(unsigned char *bytes, int bytes_lenght, int coordinates) {
-	return byteToVector(bytes, 0, bytes_lenght, bytes_lenght, coordinates);
-}
-
-// TODO: inutilizzata
-//FiniteFieldVector* FiniteField::byteToVector(unsigned char *bytes, int bytes_lenght, int offset) {
-//	return byteToVector(bytes, offset, bytes_lenght, coordinatesCount(bytes_length));
-//}
-
-/**
- * Convert a byte array to its finite field vector representation
- *
- * @param bytes an array of bytes
- * @param offset the offset of the first byte to be converted
  * @param length the number of bytes that must be converted
+ * @param offset the offset of the first byte to be converted
  * @return the representation of the array as a vector
  */
-FiniteFieldVector FiniteField::byteToVector(unsigned char *bytes, int offset, int bytes_lenght, int coordinates) {
+FiniteFieldVector* FiniteField::byteToVector(unsigned char *bytes, int bytes_lenght, int offset) {
+
+	int coordinates = coordinatesCount(bytes_lenght);
+	//return byteToVector(bytes, bytes_lenght, coordinatesCount(bytes_lenght));
 
 	int *data = new int[coordinates];
 
@@ -209,9 +183,48 @@ FiniteFieldVector FiniteField::byteToVector(unsigned char *bytes, int offset, in
 		data[i] = readBits(bytes, bytes_lenght, offset, i, bits_per_field);
 	}
 
-    return new FiniteFieldVector(data, this);
+    return new FiniteFieldVector(data, coordinates, this);
 
 }
+
+
+///**
+// * Convert a byte array to its finite field vector representation
+// *
+// * @param bytes an array of bytes
+// * @param coordinates how many coordinates should be read
+// * @return the representation of the array as a vector
+// */
+//FiniteFieldVector FiniteField::byteToVector(unsigned char *bytes, int bytes_lenght, int coordinates) {
+//	return byteToVector(bytes, 0, bytes_lenght, bytes_lenght, coordinates);
+//}
+//
+//// TODO: inutilizzata
+////FiniteFieldVector* FiniteField::byteToVector(unsigned char *bytes, int bytes_lenght, int offset) {
+////	return byteToVector(bytes, offset, bytes_lenght, coordinatesCount(bytes_length));
+////}
+//
+///**
+// * Convert a byte array to its finite field vector representation
+// *
+// * @param bytes an array of bytes
+// * @param offset the offset of the first byte to be converted
+// * @param length the number of bytes that must be converted
+// * @return the representation of the array as a vector
+// */
+//FiniteFieldVector FiniteField::byteToVector(unsigned char *bytes, int offset, int bytes_lenght, int coordinates) {
+//
+//	int *data = new int[coordinates];
+//
+//	int bits_per_field = bitsPerCoordinate();
+//
+//	for ( int i = 0 ; i < coordinates; i++) {
+//		data[i] = readBits(bytes, bytes_lenght, offset, i, bits_per_field);
+//	}
+//
+//    return new FiniteFieldVector(data, this);
+//
+//}
 
 
 int FiniteField::readBits(unsigned char* data, int data_lenght, int offset, int field, int fieldSize) {
@@ -232,62 +245,63 @@ int FiniteField::readBits(unsigned char* data, int data_lenght, int offset, int 
 
 }
 
-//
-//
-///**
-// * Convert a vector to its byte array representation
-// *
-// * @param vector a vector over the specified finite field
-// * @return the byte array representation
-// */
-//unsigned char* FiniteField::vectorToBytes(FiniteFieldVector* vector) {
-//	unsigned char *output = new unsigned char[bytesLength(vector->getLength())];
-//	vectorToBytes(vector, output, 0);
-//	return output;
-//}
-//
-//
-//
-//
-//
-//void  FiniteField::vectorToBytes (FiniteFieldVector* vector, unsigned char* output, int start) {
-//
-//	int *coordinates = new int[vector.coordinates];
-//
-//	int bitsPerField = bitsPerCoordinate();
-//
-//	for ( int i = 0 ; i < coordinates.length; i++) {
-//		writeBits(output, start, i, coordinates[i], bitsPerField);
-//	}
-//
-//}
-//
-//
-//
-//
-//void FiniteField::writeBits(unsigned char* data, int offset, int field, int value, int fieldSize) {
-//
-//	int start_bit, end_bit, i;
-//
-//	value = value % Q;
-//
-//	start_bit = field * fieldSize;
-//	end_bit = ( field + 1) * fieldSize;
-//
-//	for ( i = start_bit; i < end_bit; i++) {
-//
-//			unsigned char mask;
-//			unsigned char bit;
-//
-//			mask = ( ~( 1 << (i % 8)));
-//
-//			bit = (byte) (( ( value >> (fieldSize - 1) ) & 0x1) << ( i % 8));
-//
-//			data[i / 8+offset] = (byte) (( data[i / 8 +offset] & mask) | bit);
-//			value = value << 1;
-//	}
-//
-//}
+
+
+/**
+ * Convert a vector to its byte array representation
+ *
+ * @param vector a vector over the specified finite field
+ * @return the byte array representation
+ */
+unsigned char* FiniteField::vectorToBytes(FiniteFieldVector* vector) {
+	unsigned char *output = new unsigned char[bytesLength(vector->getLength())];
+	vectorToBytes(vector, output, 0);
+	return output;
+}
+
+
+
+
+
+void  FiniteField::vectorToBytes (FiniteFieldVector* vector, unsigned char* output, int start) {
+
+	//int[] coordinates = vector.coordinates;
+
+	int bits_per_field = bitsPerCoordinate();
+
+	for ( int i = 0 ; i < vector->getLength(); i++) {
+		writeBits(output, start, i, vector->getCoordinate(i), bits_per_field);
+	}
+
+}
+
+
+
+
+void FiniteField::writeBits(unsigned char* data, int offset, int field, int value, int fieldSize) {
+
+	int start_bit, end_bit, i;
+
+	value = value % Q;
+
+	start_bit = field * fieldSize;
+	end_bit = ( field + 1) * fieldSize;
+
+	for ( i = start_bit; i < end_bit; i++) {
+
+			unsigned char mask;
+			unsigned char bit;
+
+			mask = ( ~( 1 << (i % 8)));
+
+			// prima veniva fatto un cas a byte
+			bit = (( ( value >> (fieldSize - 1) ) & 0x1) << ( i % 8));
+			// prima veniva fatto un cas a byte a (( data
+			data[i / 8+offset] = (( data[i / 8 +offset] & mask) | bit);
+			value = value << 1;
+	}
+
+}
 
 
 
@@ -355,6 +369,8 @@ int FiniteField::getCardinality() {
 }
 
 
+
+////// TODO: servono?
 //
 //    @Override
 //    public boolean equals(Object obj) {
