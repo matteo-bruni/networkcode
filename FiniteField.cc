@@ -166,7 +166,7 @@ FiniteField::FiniteField(int total_size) {
  * array
  *
  * @param bytes an array of bytes
- * @param length the number of bytes that must be converted
+ * @param bytes_lenght the number of bytes that must be converted
  * @param offset the offset of the first byte to be converted
  * @return the representation of the array as a vector
  */

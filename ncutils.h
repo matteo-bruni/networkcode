@@ -38,6 +38,8 @@ class FiniteField {
 
 		FiniteField(int q=2, int m=4);
 		FiniteField(int total_size);
+		// TODO
+		~FiniteField();
 
 //		FiniteFieldVector byteToVector(unsigned char *bytes, int bytes_lenght);
 //		FiniteFieldVector byteToVector(unsigned char *bytes, int bytes_lenght, int coordinates);
@@ -70,6 +72,8 @@ class FiniteFieldVector {
 
 		FiniteFieldVector(int len, FiniteField* ff);
 		FiniteFieldVector(int coords[], int len, FiniteField* field);
+		// TODO
+		~FiniteFieldVector();
 
 		int getLength();
 		FiniteField* getFiniteField();
@@ -106,13 +110,18 @@ class UncodedPacket {
 	public:
 
 		static UncodedPacket wrap(int id, unsigned char *payload, int length);
+
 		UncodedPacket(int id, unsigned char *payload, int length);
-		UncodedPacket(int id, FiniteFieldVector& payload);
+		UncodedPacket(int id, FiniteFieldVector* vector);
+		// TODO
+		~UncodedPacket();
 
 		int getId();
 		unsigned char* getPayload();
 		int getPayloadLength();
 		UncodedPacket* copy();
+
+		//TODO operator:=
 		int compareTo(UncodedPacket o);
 
 	private:
@@ -130,30 +139,42 @@ class CodedPacket {
 
 	public:
 
-		CodedPacket(UncodedPacket packet, int maxPackets, FiniteField* ff);
-		CodedPacket(int maxPackets, int payloadByteLen, FiniteField ff);
-		CodedPacket(int maxPackets, unsigned char* data, int offset, int length, FiniteField ff);
+		CodedPacket(UncodedPacket* packet, int maxPackets, FiniteField* ff);
+		CodedPacket(int maxPackets, int payloadByteLen, FiniteField* ff);
+		CodedPacket(int maxPackets, unsigned char* data, int offset, int length, FiniteField* ff);
 
-		FiniteFieldVector getCodingVector();
-		FiniteFieldVector getPayload();
-		FiniteField getFiniteField();
+		static CodedPacket* createEmptyCodedPacket(int max_packets, int payload_byte_lenght, FiniteField* ff);
+
+		// TODO
+		~CodedPacket();
+
+		FiniteFieldVector* getCodingVector();
+		FiniteFieldVector* getPayloadVector();
+		FiniteField* getFiniteField();
+
 		void setCoordinate(int index, int value);
 		int getCoordinate(int index);
+
+		//TODO: add a copy constructor?
 		CodedPacket copy();
 		void setToZero();
+
 		CodedPacket add(CodedPacket vector);
 		void  addInPlace(CodedPacket vector);
+
 		CodedPacket scalarMultiply(int c);
 		void scalarMultiplyInPlace(int c);
+
 		CodedPacket multiplyAndAdd(int c, CodedPacket packet);
 		void  multiplyAndAddInPlace(int c, CodedPacket other);
+
 		unsigned char* toByteArray();
 		std::string toString();
 
 	private:
 		FiniteFieldVector* coding_vector;
 		FiniteFieldVector* payload_vector;
-		//CodedPacket(FiniteFieldVector codingVector, FiniteFieldVector payloadVector);
+		CodedPacket(FiniteFieldVector* codingVector, FiniteFieldVector* payloadVector);
 
 
 

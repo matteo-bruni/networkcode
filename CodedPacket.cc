@@ -1,5 +1,6 @@
-#include "ncutils.h"
 
+#include "ncutils.h"
+#include <assert.h>
 
 
 
@@ -15,34 +16,34 @@
  * d that over which the vectors in the packet are
  * defined
  */
-CodedPacket::CodedPacket( UncodedPacket* packet, int maxPackets, FiniteField* ff) {
+CodedPacket::CodedPacket( UncodedPacket* packet, int max_packets, FiniteField* ff) {
 
-	this->coding_vector = new FiniteFieldVector(maxPackets, ff) ;
+	this->coding_vector = new FiniteFieldVector(max_packets, ff) ;
 	this->payload_vector = ff->byteToVector(packet->getPayload(), packet->getPayloadLength() , 0);
-	this->coding_vector->setCoordinate(packet.getId(), 1);
+	this->coding_vector->setCoordinate(packet->getId(), 1);
 
 }
 
-//
-//    /**
-//     * Creates an empty coded packet, i.e. the coding vector is set to the zero
-//     * vector (and consequentely the payload vector is set to zero).
-//     *
-//     * @param maxPackets the maximal number of uncoded packets that can be combined
-//     * in this coded packet. This correspond to the length of teh coding vector.
-//     * @param payloadByteLen the length in bytes of the uncoded packets that can be combined
-//     * in this packet. The length of the payload vector of this packet will be choosen
-//     * based on this number accordingly to the finite field used.
-//     * @param ff The finite field that over which the vectors in the packet are
-//     * defined
-//     */
-//    public CodedPacket(int maxPackets, int payloadByteLen, FiniteField ff) {
-//
-//        this( new FiniteFieldVector(maxPackets, ff),
-//                new FiniteFieldVector(ff.coordinatesCount(payloadByteLen), ff));
-//
-//    }
-//
+
+/**
+ * Creates an empty coded packet, i.e. the coding vector is set to the zero
+ * vector (and consequentely the payload vector is set to zero).
+ *
+ * @param maxPackets the maximal number of uncoded packets that can be combined
+ * in this coded packet. This correspond to the length of teh coding vector.
+ * @param payloadByteLen the length in bytes of the uncoded packets that can be combined
+ * in this packet. The length of the payload vector of this packet will be choosen
+ * based on this number accordingly to the finite field used.
+ * @param ff The finite field that over which the vectors in the packet are
+ * defined
+ */
+CodedPacket* CodedPacket::createEmptyCodedPacket(int max_packets, int payload_byte_lenght, FiniteField* ff) {
+
+	return new CodedPacket(new FiniteFieldVector(max_packets, ff), new FiniteFieldVector(ff->coordinatesCount(payload_byte_lenght), ff));
+
+}
+
+
 /**
  * Creates a coded packet from its binary representation.
  *
@@ -58,137 +59,148 @@ CodedPacket::CodedPacket( UncodedPacket* packet, int maxPackets, FiniteField* ff
 
 CodedPacket::CodedPacket(int maxPackets, unsigned char* data, int offset, int length, FiniteField* ff) {
 
-	int headerLen = ff->bytesLength(maxPackets);
+	int header_byte_lenght = ff->bytesLength(maxPackets);
 
-	this->coding_vector = ff->byteToVector(data, offset, headerLen);
-	this->payload_vector = ff->byteToVector(data, headerLen+offset, length - headerLen);
+	this->coding_vector = ff->byteToVector(data, header_byte_lenght, offset);
+	this->payload_vector = ff->byteToVector(data, length - header_byte_lenght, header_byte_lenght+offset);
 
 }
 
+/*
+ * Private Constructor
+ *
+ */
+CodedPacket::CodedPacket(FiniteFieldVector* codingVector, FiniteFieldVector* payloadVector) {
+	this->coding_vector = codingVector;
+	this->payload_vector = payloadVector;
+}
 
-//CodedPacket::CodedPacket(FiniteFieldVector codingVector, FiniteFieldVector payloadVector) {
-//	this.codingVector = codingVector;
-//	this.payloadVector = payloadVector;
-//}
 
-//
-//
-//    /**
-//     * Returns the coding vector of this packet. The coding vector describes
-//     * which, and how uncoded packets have been combined to form this coded
-//     * packet. WARNING: Changing the coding vector of a packet without updating accordingly
-//     * the payload vector introduces decoding errors.
-//     *
-//     * @return the coding vector of this packet
-//     */
-//    public FiniteFieldVector getCodingVector() {
-//       return codingVector;
-//    }
-//
-//    /**
-//     * Returns the payload vector of this packet. The payload vector is a
-//     * a linear combination of uncoded packets (seen as finite field vectors).
-//     * If the coding vector is ( a1, a2, ...., an) then the payload vector is
-//     * a1 * p1 + a2 * p2 + ... + an * pn where p1, ...pn are the finite field
-//     * vector  representations of the payload of the uncoded packets.
-//     *
-//     * @return the payload vector of this packet
-//     */
-//    public FiniteFieldVector getPayload() {
-//        return payloadVector;
-//    }
-//
-//
-//    /**
-//     * Returns the finite field that is used to define the vectors
-//     * of this packet
-//     *
-//     * @return the finite field of the coding and payload vectors
-//     */
-//    public FiniteField getFiniteField() {
-//        return codingVector.getFiniteField();
-//    }
-//
-//
-//    /**
-//     *
-//     * Set the index-th coordinate of the vector representation of the packet. If
-//     * index is smaller than the length of the coding vector the corresponding
-//     * coding vector coordinate will be set, otherwise the cofficient index -
-//     * (lenght of the coding vector) of the payload will be set
-//     *
-//     *
-//     * @param index the index of the coordinate that must be set
-//     * @param value an element of the field over which the packet is defined
-//     */
-//    public void setCoordinate(int index, int value) {
-//        assert( index >= 0);
-//        assert(value < getFiniteField().getCardinality() && value >= 0);
-//        if ( index < codingVector.getLength()) {
-//            codingVector.setCoordinate(index, value);
-//        } else {
-//            payloadVector.setCoordinate(index - codingVector.getLength(), value);
-//        }
-//    }
-//
-//    /**
-//     *
-//     * Get the index-th coordinate of the vector representation of the packet. If
-//     * index is smaller than the length of the coding vector the corresponding
-//     * coding vector coordinate will be returned, otherwise the coefficient index -
-//     * (length of the coding vector) of the payload will be returned
-//     *
-//     * @param index the index of the coordinate that must be retrieved
-//     * @return the value of the coordinate, an element of the field over which the packet is defined
-//     */
-//    public int getCoordinate(int index) {
-//
-//        assert(index >= 0);
-//
-//        if ( index < codingVector.getLength()) {
-//            return codingVector.getCoordinate(index);
-//        } else {
-//            return payloadVector.getCoordinate(index - codingVector.getLength());
-//        }
-//    }
-//
-//    /**
-//     * Creates a copy of the packet
-//     *
-//     * @return a copy of the packet
-//     */
-//    public CodedPacket copy() {
-//
-//        return new CodedPacket(codingVector.copy(), payloadVector.copy());
-//
-//    }
-//
-//    /**
-//     * Set the packet contents to be a linear combination of no uncoded packets.
-//     * This sets coding and payload vector of the packet to zero.
-//     */
-//    public void setToZero() {
-//        codingVector.setToZero();
-//        payloadVector.setToZero();
-//    }
-//
-//    /**
-//     *
-//     * Returns a CodedPacket which is the sum of the current CodedPacket and
-//     * another packet. The created packet will have a coding and payload vector
-//     * which will be consistent, i.e. the content of the payload of the newly
-//     * created packet corresponds to the linear combination specified in its
-//     * coding vector
-//     *
-//     * @param vector the CodedPacket that will be summed
-//     * @return the sum of this and vector
-//     */
-//    public CodedPacket add(CodedPacket vector) {
-//        assert(vector.getFiniteField() == getFiniteField());
-//
-//        return new CodedPacket(codingVector.add(vector.codingVector), payloadVector.add(vector.payloadVector));
-//
-//    }
+
+/**
+ * Returns the coding vector of this packet. The coding vector describes
+ * which, and how uncoded packets have been combined to form this coded
+ * packet. WARNING: Changing the coding vector of a packet without updating accordingly
+ * the payload vector introduces decoding errors.
+ *
+ * @return the coding vector of this packet
+ */
+FiniteFieldVector* CodedPacket::getCodingVector() {
+   return coding_vector;
+}
+
+
+
+/**
+ * Returns the payload vector of this packet. The payload vector is a
+ * a linear combination of uncoded packets (seen as finite field vectors).
+ * If the coding vector is ( a1, a2, ...., an) then the payload vector is
+ * a1 * p1 + a2 * p2 + ... + an * pn where p1, ...pn are the finite field
+ * vector  representations of the payload of the uncoded packets.
+ *
+ * @return the payload vector of this packet
+ */
+FiniteFieldVector* CodedPacket::getPayloadVector() {
+	return payload_vector;
+}
+
+
+/**
+ * Returns the finite field that is used to define the vectors
+ * of this packet
+ *
+ * @return the finite field of the coding and payload vectors
+ */
+FiniteField* CodedPacket::getFiniteField() {
+	return coding_vector->getFiniteField();
+}
+
+
+/**
+ *
+ * Set the index-th coordinate of the vector representation of the packet. If
+ * index is smaller than the length of the coding vector the corresponding
+ * coding vector coordinate will be set, otherwise the cofficient index -
+ * (lenght of the coding vector) of the payload will be set
+ *
+ *
+ * @param index the index of the coordinate that must be set
+ * @param value an element of the field over which the packet is defined
+ */
+void CodedPacket::setCoordinate(int index, int value) {
+
+	assert( index >= 0);
+	assert(value < getFiniteField()->getCardinality() && value >= 0);
+
+	if ( index < coding_vector->getLength()) {
+		coding_vector->setCoordinate(index, value);
+	} else {
+		payload_vector->setCoordinate(index - coding_vector->getLength(), value);
+	}
+}
+
+
+/**
+ *
+ * Get the index-th coordinate of the vector representation of the packet. If
+ * index is smaller than the length of the coding vector the corresponding
+ * coding vector coordinate will be returned, otherwise the coefficient index -
+ * (length of the coding vector) of the payload will be returned
+ *
+ * @param index the index of the coordinate that must be retrieved
+ * @return the value of the coordinate, an element of the field over which the packet is defined
+ */
+int CodedPacket::getCoordinate(int index) {
+
+	assert(index >= 0);
+
+	if ( index < coding_vector->getLength()) {
+		return coding_vector->getCoordinate(index);
+	} else {
+		return payload_vector->getCoordinate(index - coding_vector->getLength());
+	}
+}
+
+
+/**
+ * Creates a copy of the packet
+ *
+ * @return a copy of the packet
+ */
+CodedPacket* CodedPacket::copy() {
+
+	return new CodedPacket(coding_vector->copy(), payload_vector->copy());
+
+}
+
+/**
+ * Set the packet contents to be a linear combination of no uncoded packets.
+ * This sets coding and payload vector of the packet to zero.
+ */
+void CodedPacket::setToZero() {
+	coding_vector->setToZero();
+	payload_vector->setToZero();
+
+}
+
+/**
+ *
+ * Returns a CodedPacket which is the sum of the current CodedPacket and
+ * another packet. The created packet will have a coding and payload vector
+ * which will be consistent, i.e. the content of the payload of the newly
+ * created packet corresponds to the linear combination specified in its
+ * coding vector
+ *
+ * @param vector the CodedPacket that will be summed
+ * @return the sum of this and vector
+ */
+CodedPacket* CodedPacket::add(CodedPacket* vector) {
+
+	assert(vector->getFiniteField() == getFiniteField());
+
+	return new CodedPacket(codingVector.add(vector.codingVector), payloadVector.add(vector.payloadVector));
+
+}
 //
 //    /**
 //    *

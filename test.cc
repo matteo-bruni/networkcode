@@ -51,6 +51,10 @@ int main() {
     	}
 
     }
+    printf(" vector to string :\n" );
+
+	std::cout << vector->toString()<< std::endl;
+
     printf("\n\n");
 
 
@@ -80,15 +84,6 @@ int main() {
     	}
 
     }
-
-
-
-
-
-
-
-
-
 
 
 
