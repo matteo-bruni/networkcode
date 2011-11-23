@@ -109,29 +109,29 @@ FiniteFieldVector* FiniteFieldVector::copy() {
  * @param vector the other summand
  * @return the sum of this and vector
  */
-FiniteFieldVector* FiniteFieldVector::add(FiniteFieldVector& vector) {
+FiniteFieldVector* FiniteFieldVector::add(FiniteFieldVector* vector) {
 
-	assert(vector.getFiniteField()->getCardinality() == ff->getCardinality());
-	assert(vector.length == this->length);
+	assert(vector->getFiniteField()->getCardinality() == ff->getCardinality());
+	assert(vector->length == this->length);
 
 	FiniteFieldVector *out = new FiniteFieldVector(getLength(), ff);
 
 
 	for ( int i = 0 ; i < this->length ; i++ ) {
-		out->coordinates[i] = ff->sum[this->coordinates[i]][vector.coordinates[i]];
+		out->coordinates[i] = ff->sum[this->coordinates[i]][vector->coordinates[i]];
 	}
 
 	return out;
 }
 
 
-void FiniteFieldVector::addInPlace(FiniteFieldVector& vector) {
+void FiniteFieldVector::addInPlace(FiniteFieldVector* vector) {
 
-	assert(vector.getFiniteField()->getCardinality() == ff->getCardinality());
-	assert(vector.length == this->length);
+	assert(vector->getFiniteField()->getCardinality() == ff->getCardinality());
+	assert(vector->length == this->length);
 
 	for ( int i = 0 ; i < this->length ; i++ ) {
-		coordinates[i] = ff->sum[coordinates[i]][vector.coordinates[i]];
+		coordinates[i] = ff->sum[coordinates[i]][vector->coordinates[i]];
 	}
 
 }
@@ -163,16 +163,16 @@ void FiniteFieldVector::scalarMultiplyInPlace(int c) {
 }
 
 
-FiniteFieldVector* FiniteFieldVector::multiplyAndAdd(int c, FiniteFieldVector& other) {
+FiniteFieldVector* FiniteFieldVector::multiplyAndAdd(int c, FiniteFieldVector* other) {
 
-	assert(other.getFiniteField()->getCardinality() == ff->getCardinality());
-	assert(other.length == this->length);
+	assert(other->getFiniteField()->getCardinality() == ff->getCardinality());
+	assert(other->length == this->length);
 	assert(c < ff->getCardinality() && c >= 0);
 
 	FiniteFieldVector* out = new FiniteFieldVector(getLength(), ff);
 
 	for ( int i = 0 ; i < this->length ; i++ ) {
-		out->coordinates[i] = ff->sum[ff->mul[other.coordinates[i]][c]][coordinates[i]];
+		out->coordinates[i] = ff->sum[ff->mul[other->coordinates[i]][c]][coordinates[i]];
 	}
 
 	return out;
@@ -181,13 +181,13 @@ FiniteFieldVector* FiniteFieldVector::multiplyAndAdd(int c, FiniteFieldVector& o
 
 
 
-void FiniteFieldVector::multiplyAndAddInPlace(int c, FiniteFieldVector& other) {
+void FiniteFieldVector::multiplyAndAddInPlace(int c, FiniteFieldVector* other) {
 
-	assert(other.getFiniteField()->getCardinality() == ff->getCardinality());
-	assert(other.length == this->length);
+	assert(other->getFiniteField()->getCardinality() == ff->getCardinality());
+	assert(other->length == this->length);
 
 	for ( int i = 0 ; i < this->length ; i++ ) {
-		coordinates[i] = ff->sum[ff->mul[other.coordinates[i]][c]][coordinates[i]];
+		coordinates[i] = ff->sum[ff->mul[other->coordinates[i]][c]][coordinates[i]];
 	}
 
 }

@@ -198,22 +198,27 @@ CodedPacket* CodedPacket::add(CodedPacket* vector) {
 
 	assert(vector->getFiniteField() == getFiniteField());
 
-	return new CodedPacket(codingVector.add(vector.codingVector), payloadVector.add(vector.payloadVector));
+	return new CodedPacket( coding_vector->add(vector->getCodingVector()), payload_vector->add(vector->getPayloadVector()) );
+
 
 }
-//
-//    /**
-//    *
-//    * Adds the specified CodedPacket to the current CodedPacket. This method
-//    * modifies the CodedPacket.
-//    *
-//    * @param vector the CodedPacket that will be summed
-//    *
-//    */
-//    public void  addInPlace(CodedPacket vector) {
-//    	codingVector.addInPlace(vector.codingVector);
-//    	payloadVector.addInPlace(vector.payloadVector);
-//    }
+
+
+/**
+*
+* Adds the specified CodedPacket to the current CodedPacket. This method
+* modifies the CodedPacket.
+*
+* @param vector the CodedPacket that will be summed
+*
+*/
+void CodedPacket::addInPlace(CodedPacket* vector) {
+
+	coding_vector->addInPlace(vector->getCodingVector());
+	payload_vector->addInPlace(vector->getPayloadVector());
+
+}
+
 //
 //    /**
 //     *
