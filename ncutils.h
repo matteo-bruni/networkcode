@@ -130,7 +130,7 @@ class CodedPacket {
 
 	public:
 
-		CodedPacket( UncodedPacket packet, int maxPackets, FiniteField* ff);
+		CodedPacket(UncodedPacket packet, int maxPackets, FiniteField* ff);
 		CodedPacket(int maxPackets, int payloadByteLen, FiniteField ff);
 		CodedPacket(int maxPackets, unsigned char* data, int offset, int length, FiniteField ff);
 
@@ -153,10 +153,7 @@ class CodedPacket {
 	private:
 		FiniteFieldVector* coding_vector;
 		FiniteFieldVector* payload_vector;
-		CodedPacket(FiniteFieldVector codingVector, FiniteFieldVector payloadVector);
-
-
-
+		//CodedPacket(FiniteFieldVector codingVector, FiniteFieldVector payloadVector);
 
 
 

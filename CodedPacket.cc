@@ -15,15 +15,12 @@
  * d that over which the vectors in the packet are
  * defined
  */
-CodedPacket::CodedPacket( UncodedPacket packet, int maxPackets, FiniteField* ff) {
-//
-//	//this( new FiniteFieldVector(maxPackets, ff), ff.byteToVector(packet.getPayload()));
-//
-//	this->coding_vector = new FiniteFieldVector(maxPackets, ff) ;
-//	//TODO: manca bytetovector
-//	this->payload_vector = ff->byteToVector(packet.getPayload());
-//
-//	this->coding_vector->setCoordinate(packet.getId(), 1);
+CodedPacket::CodedPacket( UncodedPacket* packet, int maxPackets, FiniteField* ff) {
+
+	this->coding_vector = new FiniteFieldVector(maxPackets, ff) ;
+	this->payload_vector = ff->byteToVector(packet->getPayload(), packet->getPayloadLength() , 0);
+	this->coding_vector->setCoordinate(packet.getId(), 1);
+
 }
 
 //
@@ -46,28 +43,28 @@ CodedPacket::CodedPacket( UncodedPacket packet, int maxPackets, FiniteField* ff)
 //
 //    }
 //
-//    /**
-//     * Creates a coded packet from its binary representation.
-//     *
-//     * @param maxPackets the maximal number of uncoded packets that can be combined
-//     * in this coded packet. This correspond to the length of teh coding vector.
-//     *
-//     * @param data an array containing the binary representation of the coded packet
-//     * @param offset the first byte of the binary representation in the array data
-//     * @param length the length of the binary representation
-//     * @param ff The finite field that over which the vectors in the packet are
-//     * defined
-//     */
-//
-//    public CodedPacket(int maxPackets, byte[] data, int offset, int length, FiniteField ff) {
-//
-//    	int headerLen = ff.bytesLength(maxPackets);
-//
-//    	this.codingVector = ff.byteToVector(data, offset, headerLen);
-//    	this.payloadVector = ff.byteToVector(data, headerLen+offset, length - headerLen);
-//
-//    }
-//
+/**
+ * Creates a coded packet from its binary representation.
+ *
+ * @param maxPackets the maximal number of uncoded packets that can be combined
+ * in this coded packet. This correspond to the length of the coding vector.
+ *
+ * @param data an array containing the binary representation of the coded packet
+ * @param offset the first byte of the binary representation in the array data
+ * @param length the length of the binary representation
+ * @param ff The finite field that over which the vectors in the packet are
+ * defined
+ */
+
+CodedPacket::CodedPacket(int maxPackets, unsigned char* data, int offset, int length, FiniteField* ff) {
+
+	int headerLen = ff->bytesLength(maxPackets);
+
+	this->coding_vector = ff->byteToVector(data, offset, headerLen);
+	this->payload_vector = ff->byteToVector(data, headerLen+offset, length - headerLen);
+
+}
+
 
 //CodedPacket::CodedPacket(FiniteFieldVector codingVector, FiniteFieldVector payloadVector) {
 //	this.codingVector = codingVector;

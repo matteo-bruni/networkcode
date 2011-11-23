@@ -40,20 +40,20 @@ UncodedPacket::UncodedPacket(int id, unsigned char* payload, int length) {
 
 
 // TODO: serve vectortobytes
-///**
-// * Creates an uncoded packet with the specified Id and as payload the
-// * byte array representation ( see FiniteField.vectorToBytes ) of a
-// *  given vector
-// *
-// * @param id the id of the packet
-// * @param payload a vector that will be the payload
-// */
-//UncodedPacket::UncodedPacket(int id, FiniteFieldVector& payload) {
-//
-//	this->id = id;
-//	this->payload = payload.getFiniteField().vectorToBytes(payload);
-//
-//}
+/**
+ * Creates an uncoded packet with the specified Id and as payload the
+ * byte array representation ( see FiniteField.vectorToBytes ) of a
+ *  given vector
+ *
+ * @param id the id of the packet
+ * @param payload a vector that will be the payload
+ */
+UncodedPacket::UncodedPacket(int id, FiniteFieldVector* vector) {
+
+	this->id = id;
+	this->payload = vector->getFiniteField()->vectorToBytes(vector);
+
+}
 
 /**
  * Returns the id of the packet
