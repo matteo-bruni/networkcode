@@ -1,5 +1,6 @@
 #include "ncutils.h"
 #include <memory.h>
+#include <sstream>
 
 
 
@@ -87,17 +88,21 @@ UncodedPacket* UncodedPacket::copy() {
 
 
 
-//
-//    @Override
-//    public String toString() {
-//        String ret = "Id: " + id + " Payload: ";
-//        for (int k = 0; k < payload.length; k++) {
-//            ret += String.format("%02X ", payload[k]);
-//        }
-//
-//        return ret;
-//    }
-//
+
+
+std::string UncodedPacket::toString() {
+	string ret = "Id: " + id + " Payload: ";
+	for (int k = 0; k < payload_length; k++) {
+		// TODO: STRING FORMAT
+		std::ostringstream oss;
+		oss << payload[i];
+		ret += " "+ oss.str();
+		//ret += String.format("%02X ", payload[k]);
+	}
+
+	return ret;
+}
+
 
 //
 //	@Override
