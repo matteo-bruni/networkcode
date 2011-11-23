@@ -157,17 +157,17 @@ class CodedPacket {
 		int getCoordinate(int index);
 
 		//TODO: add a copy constructor?
-		CodedPacket copy();
+		CodedPacket* copy();
 		void setToZero();
 
-		CodedPacket add(CodedPacket vector);
-		void  addInPlace(CodedPacket vector);
+		CodedPacket* add(CodedPacket* vector);
+		void  addInPlace(CodedPacket* vector);
 
-		CodedPacket scalarMultiply(int c);
+		CodedPacket* scalarMultiply(int c);
 		void scalarMultiplyInPlace(int c);
 
-		CodedPacket multiplyAndAdd(int c, CodedPacket packet);
-		void  multiplyAndAddInPlace(int c, CodedPacket other);
+		CodedPacket* multiplyAndAdd(int c, CodedPacket* vector);
+		void  multiplyAndAddInPlace(int c, CodedPacket* vector);
 
 		unsigned char* toByteArray();
 		std::string toString();

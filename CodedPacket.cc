@@ -1,6 +1,7 @@
 
 #include "ncutils.h"
 #include <assert.h>
+#include <string>
 
 
 
@@ -220,105 +221,107 @@ void CodedPacket::addInPlace(CodedPacket* vector) {
 }
 
 //
-//    /**
-//     *
-//     * Returns a CodedPacket which is a scalar multiple of the current
-//     * CodedPacket. The created packet will have a coding and payload vector
-//     * which will be consistent, i.e. the content of the payload of the newly
-//     * created packet corresponds to the linear combination specified in its
-//     * coding vector
-//     *
-//     * @param c an element of the finite field used to define this packet that
-//     * will be used to multiply the packet
-//     * @return the scalar multiple of the current packet, i.e. each coordinate
-//     * of the current packet will be multiplied by c.
-//     */
-//    public CodedPacket scalarMultiply(int c) {
-//        assert(c < getFiniteField().getCardinality() && c >= 0);
-//
-//        return new CodedPacket(codingVector.scalarMultiply(c), payloadVector.scalarMultiply(c));
-//
-//    }
-//
-//    /**
-//    *
-//    * Multiplies the CodedPacket by a scalar. This method modifies the CodedPacket.
-//    *
-//    * @param c an element of the finite field used to define this packet that
-//    * will be used to multiply the packet
-//    *
-//    */
-//
-//    public void scalarMultiplyInPlace(int c) {
-//    	codingVector.scalarMultiplyInPlace(c);
-//    	payloadVector.scalarMultiply(c);
-//    }
-//
-//
-//    /**
-//    *
-//    * Returns a CodedPacket which is the sum of the current packet and a scalar multiple
-//    * of the another CodedPacket. The created packet will have a coding and
-//    * payload vector which will be consistent, i.e. the content of the payload of the
-//    * newly created packet corresponds to the linear combination specified in its
-//    * coding vector
-//    *
-//    * @param c an element of the finite field used to define this packet that
-//    * will be used to multiply the packet that will be added
-//    * @param packet a packet that will be multiplied by c and then added to obtain the resulting
-//    * packet
-//    * @return the sum of the current packet and the scalar multiple of packet. The i-th coordinate
-//    * of this vector is equal to the sum of the i-th coordinate of the current vector and the i-th
-//    * coordinate of packet multiplied by c
-//    */
-//    public CodedPacket multiplyAndAdd(int c, CodedPacket packet) {
-//        assert(packet.getFiniteField() == getFiniteField());
-//
-//        return new CodedPacket(codingVector.multiplyAndAdd(c, packet.codingVector), payloadVector.multiplyAndAdd(c, packet.payloadVector));
-//
-//    }
-//
-//    /**
-//     * Adds to the current packet the CodedPacket other multiplied by c. This
-//     * method modifies the current CodedPacket
-//     *
-//     * @param c an element of the finite field used to define this
-//     * @param other another packet with the parameters as the current packet
-//     */
-//    public void  multiplyAndAddInPlace(int c, CodedPacket other) {
-//    	codingVector.multiplyAndAddInPlace(c, other.codingVector);
-//    	payloadVector.multiplyAndAddInPlace(c, other.payloadVector);
-//    }
-//
-//    /**
-//     * Returns the binary representation of the packet
-//     *
-//     * @return a byte array containing coding vector and payload
-//     */
-//    public byte[] toByteArray() {
-//
-//    	FiniteField ff = getFiniteField();
-//
-//    	int headerLength = ff.bytesLength(codingVector.getLength());
-//
-//		byte[] ret = new byte[headerLength + ff.bytesLength(payloadVector.getLength())];
-//
-//    	ff.vectorToBytes(codingVector, ret, 0);
-//    	ff.vectorToBytes(payloadVector, ret, headerLength);
-//
-//    	return ret;
-//
-//    }
-//
-//
-//    @Override
-//    public String toString() {
-//
-//        return codingVector.toString() + " | " + payloadVector.toString();
-//
-//    }
-//
-//
-//
-//
-//}
+/**
+ *
+ * Returns a CodedPacket which is a scalar multiple of the current
+ * CodedPacket. The created packet will have a coding and payload vector
+ * which will be consistent, i.e. the content of the payload of the newly
+ * created packet corresponds to the linear combination specified in its
+ * coding vector
+ *
+ * @param c an element of the finite field used to define this packet that
+ * will be used to multiply the packet
+ * @return the scalar multiple of the current packet, i.e. each coordinate
+ * of the current packet will be multiplied by c.
+ */
+CodedPacket* CodedPacket::scalarMultiply(int c) {
+
+	assert(c < getFiniteField()->getCardinality() && c >= 0);
+
+	return new CodedPacket(coding_vector->scalarMultiply(c), payload_vector->scalarMultiply(c));
+
+}
+
+/**
+*
+* Multiplies the CodedPacket by a scalar. This method modifies the CodedPacket.
+*
+* @param c an element of the finite field used to define this packet that
+* will be used to multiply the packet
+*
+*/
+
+void CodedPacket::scalarMultiplyInPlace(int c) {
+	coding_vector->scalarMultiplyInPlace(c);
+	payload_vector->scalarMultiplyInPlace(c);
+}
+
+
+/**
+*
+* Returns a CodedPacket which is the sum of the current packet and a scalar multiple
+* of the another CodedPacket. The created packet will have a coding and
+* payload vector which will be consistent, i.e. the content of the payload of the
+* newly created packet corresponds to the linear combination specified in its
+* coding vector
+*
+* @param c an element of the finite field used to define this packet that
+* will be used to multiply the packet that will be added
+* @param packet a packet that will be multiplied by c and then added to obtain the resulting
+* packet
+* @return the sum of the current packet and the scalar multiple of packet. The i-th coordinate
+* of this vector is equal to the sum of the i-th coordinate of the current vector and the i-th
+* coordinate of packet multiplied by c
+*/
+CodedPacket* CodedPacket::multiplyAndAdd(int c, CodedPacket* packet) {
+
+	assert(packet->getFiniteField() == getFiniteField());
+
+	return new CodedPacket(coding_vector->multiplyAndAdd(c, packet->getCodingVector()), payload_vector->multiplyAndAdd(c, packet->getPayloadVector()));
+
+}
+
+
+/**
+ * Adds to the current packet the CodedPacket other multiplied by c. This
+ * method modifies the current CodedPacket
+ *
+ * @param c an element of the finite field used to define this
+ * @param other another packet with the parameters as the current packet
+ */
+void  CodedPacket::multiplyAndAddInPlace(int c, CodedPacket* other) {
+
+	coding_vector->multiplyAndAddInPlace(c, other->getCodingVector());
+	payload_vector->multiplyAndAddInPlace(c, other->getPayloadVector());
+
+}
+
+
+/**
+ * Returns the binary representation of the packet
+ *
+ * @return a byte array containing coding vector and payload
+ */
+unsigned char* CodedPacket::toByteArray() {
+
+	int header_byte_lenght = getFiniteField()->bytesLength(coding_vector->getLength());
+
+
+	unsigned char* ret = new unsigned char[header_byte_lenght + getFiniteField()->bytesLength(payload_vector->getLength())];
+
+	getFiniteField()->vectorToBytes(coding_vector, ret, 0);
+	getFiniteField()->vectorToBytes(payload_vector, ret, header_byte_lenght);
+
+	return ret;
+
+}
+
+
+
+std::string CodedPacket::toString() {
+
+	return coding_vector->toString() + " | " + payload_vector->toString();
+
+}
+
+
