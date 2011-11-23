@@ -124,6 +124,8 @@ class UncodedPacket {
 		//TODO operator:=
 		int compareTo(UncodedPacket o);
 
+		std::string toString();
+
 	private:
 
 		int id;
