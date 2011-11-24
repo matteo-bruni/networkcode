@@ -91,11 +91,18 @@ UncodedPacket* UncodedPacket::copy() {
 
 
 std::string UncodedPacket::toString() {
-	string ret = "Id: " + id + " Payload: ";
+
+	std::stringstream sstm;
+
+	//TODO FIXME
+	//std::string ret = "Id: " + id + " Payload: ";
+
+	sstm << "Id: " << id << " Payload: ";
+	std::string ret = sstm.str();
+
 	for (int k = 0; k < payload_length; k++) {
-		// TODO: STRING FORMAT
 		std::ostringstream oss;
-		oss << payload[i];
+		oss << payload[k];
 		ret += " "+ oss.str();
 		//ret += String.format("%02X ", payload[k]);
 	}

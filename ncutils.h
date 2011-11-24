@@ -1,5 +1,6 @@
 
 #include <string>
+#include <map>
 
 // TODO: DISTRUTTORI VARI!!!!
 
@@ -34,6 +35,8 @@ class FiniteField {
 		 * Associate two field elements to their multiplication
 		 */
 		int **mul;
+
+		// TODO: create sub() sum() div() mul() and keep var private
 
 
 		FiniteField(int q=2, int m=4);
@@ -181,6 +184,62 @@ class CodedPacket {
 
 
 };
+
+/**
+ *
+ * This exception is raised by CodingVectorDecoder when
+ * a vector is detected to be linerly dependant of the vectors
+ * previously added.
+ *
+ * @author lokeller
+ */
+class LinearDependantException {
+	public:
+		LinearDependantException(){};
+};
+//LinearDependantException::LinearDependantException(){}
+
+class CodingVectorDecoder {
+
+	private:
+		/* the matrix used for gaussian jordan elimination, the first half of the
+		 * columns store the matrix being inverted the second half the inverted
+		 * matrix.
+		 */
+		int** decodeMatrix;
+
+		/** stores the position of the pivot of each line */
+		int* pivotPos;
+
+		/** stores for each column if it is a pivot column for a line or not*/
+		bool* isPivot;
+
+		/** stores for each column if it has already been decoded or not*/
+		bool* decoded;
+
+		/** stores the number of non-zero lines in the decode matrix ( the number
+		 * of packets that have been received */
+		int packetCount;
+
+		/*
+		 * maxPackets the length of the vectors have to be decoded
+		 */
+		int decodeMatrixLenght;
+
+		/** the finite field that is used in this decoder */
+		FiniteField* ff;
+
+	public:
+		CodingVectorDecoder(int maxPackets, FiniteField* ff);
+		int getMaxPackets();
+		int getSubspaceSize();
+
+		std::map<int, FiniteFieldVector*> addVector(FiniteFieldVector* v) throw(LinearDependantException);
+
+
+};
+
+
 
 
 
