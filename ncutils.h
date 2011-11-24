@@ -181,8 +181,6 @@ class CodedPacket {
 		FiniteFieldVector* coding_vector;
 		FiniteFieldVector* payload_vector;
 
-
-
 };
 
 /**
