@@ -76,6 +76,10 @@ CodedPacket::CodedPacket(FiniteFieldVector* codingVector, FiniteFieldVector* pay
 	this->payload_vector = payloadVector;
 }
 
+CodedPacket::~CodedPacket(){
+	delete [] coding_vector;
+	delete [] payload_vector;
+}
 
 
 /**

@@ -16,6 +16,9 @@ PacketDecoder::PacketDecoder(FiniteField* field, int maxPackets, int payloadByte
 	this->payloadCoordinatesCount = ff->coordinatesCount(payloadBytesLength);
 }
 
+PacketDecoder::~PacketDecoder(){
+	delete [] codingVectorDecoder;
+}
 
 /**
  *

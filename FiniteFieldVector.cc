@@ -25,6 +25,10 @@ FiniteFieldVector::FiniteFieldVector(int coords[], int coords_len, FiniteField* 
 	this->length = coords_len;
 }
 
+FiniteFieldVector::~FiniteFieldVector(){
+	delete [] coordinates;
+}
+
 /**
  * Returns the number of coordinates of the vector
  *

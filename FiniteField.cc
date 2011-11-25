@@ -23,6 +23,10 @@ int ipow(int base, int exp)
 		return result;
 }
 
+FiniteField* FiniteField::getDefaultFiniteField(){
+	return new FiniteField(2,4);
+}
+
 /**
  * Constructs a new extension field
  *
@@ -159,6 +163,23 @@ FiniteField::FiniteField(int total_size) {
 	}
 
 }
+
+FiniteField::~FiniteField(){
+
+	for(int i = 0; i < Q; ++i){
+		delete [] sum[i];
+		delete [] mul[i];
+		delete [] div[i];
+		delete [] sub[i];
+	}
+
+	delete [] inverse;
+	delete [] sum;
+	delete [] mul;
+	delete [] div;
+	delete [] sub;
+}
+
 
 /**
  * Convert a byte array to its finite field vector representation, this method

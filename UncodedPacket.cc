@@ -39,7 +39,6 @@ UncodedPacket::UncodedPacket(int id, unsigned char* payload, int length) {
 	this->payload_length = length;
 }
 
-
 // TODO: serve vectortobytes
 /**
  * Creates an uncoded packet with the specified Id and as payload the
@@ -55,6 +54,11 @@ UncodedPacket::UncodedPacket(int id, FiniteFieldVector* vector) {
 	this->payload = vector->getFiniteField()->vectorToBytes(vector);
 
 }
+
+UncodedPacket::~UncodedPacket(){
+	delete [] payload;
+}
+
 
 /**
  * Returns the id of the packet

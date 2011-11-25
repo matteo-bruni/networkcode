@@ -41,10 +41,10 @@ class FiniteField {
 		// TODO: create sub() sum() div() mul() and keep var private
 
 
-		FiniteField(int q=2, int m=4);
+		FiniteField(int q, int m);
 		FiniteField(int total_size);
-		// TODO
 		~FiniteField();
+		static FiniteField* getDefaultFiniteField();
 
 //		FiniteFieldVector byteToVector(unsigned char *bytes, int bytes_lenght);
 //		FiniteFieldVector byteToVector(unsigned char *bytes, int bytes_lenght, int coordinates);
@@ -68,6 +68,7 @@ class FiniteField {
 		 */
 		int Q;
 
+
 };
 
 
@@ -77,8 +78,8 @@ class FiniteFieldVector {
 
 		FiniteFieldVector(int len, FiniteField* ff);
 		FiniteFieldVector(int coords[], int len, FiniteField* field);
-		// TODO
 		~FiniteFieldVector();
+
 
 		int getLength();
 		FiniteField* getFiniteField();
@@ -105,6 +106,7 @@ class FiniteFieldVector {
 		int *coordinates;
 		int length;
 		FiniteField* ff ;
+
 
 };
 
@@ -139,6 +141,7 @@ class UncodedPacket {
 
 
 
+
 };
 
 class CodedPacket {
@@ -149,11 +152,10 @@ class CodedPacket {
 		CodedPacket(UncodedPacket* packet, int maxPackets, FiniteField* ff);
 		CodedPacket(int maxPackets, int payloadByteLen, FiniteField* ff);
 		CodedPacket(int maxPackets, unsigned char* data, int offset, int length, FiniteField* ff);
+		~CodedPacket();
+
 
 		static CodedPacket* createEmptyCodedPacket(int max_packets, int payload_byte_lenght, FiniteField* ff);
-
-		// TODO
-		~CodedPacket();
 
 		FiniteFieldVector* getCodingVector();
 		FiniteFieldVector* getPayloadVector();
@@ -200,6 +202,16 @@ class LinearDependantException {
 
 class CodingVectorDecoder {
 
+	public:
+		CodingVectorDecoder(int maxPackets, FiniteField* ff);
+		~CodingVectorDecoder();
+
+		int getMaxPackets();
+		int getSubspaceSize();
+
+		std::map<int, FiniteFieldVector*> addVector(FiniteFieldVector* v) throw(LinearDependantException);
+
+
 	private:
 		/* the matrix used for gaussian jordan elimination, the first half of the
 		 * columns store the matrix being inverted the second half the inverted
@@ -228,13 +240,6 @@ class CodingVectorDecoder {
 		/** the finite field that is used in this decoder */
 		FiniteField* ff;
 
-	public:
-		CodingVectorDecoder(int maxPackets, FiniteField* ff);
-		int getMaxPackets();
-		int getSubspaceSize();
-
-		std::map<int, FiniteFieldVector*> addVector(FiniteFieldVector* v) throw(LinearDependantException);
-
 
 };
 
@@ -254,6 +259,8 @@ class PacketDecoder {
 
 	public:
 		PacketDecoder(FiniteField* field, int maxPackets, int payloadBytesLength);
+		~PacketDecoder();
+
 		int getSubspaceSize();
 		int getMaxPackets();
 		std::vector<UncodedPacket*> addPacket(CodedPacket* p);
@@ -266,6 +273,7 @@ class PacketDecoder {
 		CodingVectorDecoder* codingVectorDecoder;
 		int payloadCoordinatesCount;
 		FiniteField* ff;
+
 
 };
 

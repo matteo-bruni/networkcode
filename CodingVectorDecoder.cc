@@ -41,6 +41,19 @@ CodingVectorDecoder::CodingVectorDecoder(int maxPackets, FiniteField* ff) {
 
 }
 
+CodingVectorDecoder::~CodingVectorDecoder(){
+
+
+	for(int i = 0; i < decodeMatrixLenght; ++i){
+		delete [] decodeMatrix[i];
+	}
+
+	delete [] decodeMatrix;
+	delete [] pivotPos;
+	delete [] isPivot;
+	delete [] decoded;
+}
+
 /**
  * Returns the maximum number of packets that can be combined (i.e. the
  * length of the coding vectors being decoded)
@@ -51,7 +64,6 @@ int CodingVectorDecoder::getMaxPackets() {
 	//return decodeMatrix.length;
 	return decodeMatrixLenght;
 }
-////////////////////////////////////////////////////////////////////////////////
 
 /**
  *
