@@ -1,6 +1,8 @@
 
 #include <string>
 #include <map>
+#include <vector>
+
 
 // TODO: DISTRUTTORI VARI!!!!
 
@@ -97,7 +99,6 @@ class FiniteFieldVector {
 		void multiplyAndAddInPlace(int c, FiniteFieldVector* other);
 
 		std::string toString();
-
 
 
 	private:
@@ -239,8 +240,34 @@ class CodingVectorDecoder {
 
 
 
+///**
+// * This class supports decoding of coded packets. It uses a coding vector
+// * decoder to compute how to reconstruct uncoded packets and then linearly
+// * combine the received packets payloads to reconstruct the uncoded payloads.
+// *
+// * @author lokeller
+// */
 
 
+
+class PacketDecoder {
+
+	public:
+		PacketDecoder(FiniteField* field, int maxPackets, int payloadBytesLength);
+		int getSubspaceSize();
+		int getMaxPackets();
+		std::vector<UncodedPacket*> addPacket(CodedPacket* p);
+
+	private:
+		FiniteFieldVector* decodePayload(FiniteFieldVector* encoding);
+
+		std::vector<CodedPacket*> packets;// = new Vector<CodedPacket>();
+
+		CodingVectorDecoder* codingVectorDecoder;
+		int payloadCoordinatesCount;
+		FiniteField* ff;
+
+};
 
 
 
