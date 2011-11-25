@@ -52,7 +52,7 @@ void block_level_example(){
 		std::fill(payload, payload+payloadLen, 0xA0+i);
 		//Arrays.fill(payload, (byte) (0XA0 +  i));
 		inputPackets.push_back(UncodedPacket(i, payload, payloadLen));
-		std::cout<< "Uncodedpacket: " << i << ": "<< inputPackets[i].toString();
+		//std::cout<< "Uncodedpacket: " << i << ": "<< inputPackets[i].toString();
 	}
 
 //
