@@ -26,6 +26,8 @@ FiniteFieldVector::FiniteFieldVector(int coords[], int coords_len, FiniteField* 
 }
 
 FiniteFieldVector::~FiniteFieldVector(){
+	std::cout << "Distruttore FiniteFieldVector " <<std::endl;
+
 	delete [] coordinates;
 }
 

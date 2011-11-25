@@ -3,6 +3,7 @@
 #include <map>
 #include <vector>
 
+#include <iostream>
 
 // TODO: DISTRUTTORI VARI!!!!
 
@@ -117,7 +118,7 @@ class UncodedPacket {
 
 		static UncodedPacket wrap(int id, unsigned char *payload, int length);
 
-		UncodedPacket(int id, unsigned char *payload, int length);
+		UncodedPacket(int id, unsigned char *payload_vector, int length);
 		UncodedPacket(int id, FiniteFieldVector* vector);
 		// TODO
 		~UncodedPacket();

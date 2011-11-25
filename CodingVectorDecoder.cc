@@ -42,6 +42,7 @@ CodingVectorDecoder::CodingVectorDecoder(int maxPackets, FiniteField* ff) {
 }
 
 CodingVectorDecoder::~CodingVectorDecoder(){
+	std::cout << "Distruttore CodingVectorDecoder " <<std::endl;
 
 
 	for(int i = 0; i < decodeMatrixLenght; ++i){

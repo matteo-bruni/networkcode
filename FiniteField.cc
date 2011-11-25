@@ -165,6 +165,7 @@ FiniteField::FiniteField(int total_size) {
 }
 
 FiniteField::~FiniteField(){
+	std::cout << "Distruttore FiniteField " <<std::endl;
 
 	for(int i = 0; i < Q; ++i){
 		delete [] sum[i];

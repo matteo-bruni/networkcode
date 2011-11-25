@@ -3,6 +3,8 @@
 #include <sstream>
 
 
+#include <stdio.h>
+
 
 // TODO: non sembra mai usato
 ///**
@@ -24,6 +26,7 @@
 
 UncodedPacket::UncodedPacket(int id) {
 	this->id = id;
+	this->payload_length = 0;
 }
 
 /**
@@ -32,10 +35,10 @@ UncodedPacket::UncodedPacket(int id) {
  * @param id the id of the packet
  * @param payload the payload
  */
-UncodedPacket::UncodedPacket(int id, unsigned char* payload, int length) {
+UncodedPacket::UncodedPacket(int id, unsigned char* payload_vector, int length) {
 	this->id = id;
 	this->payload = new unsigned char[length];
-	memcpy(this->payload, payload, length);
+	memcpy(this->payload, payload_vector, length);
 	this->payload_length = length;
 }
 
@@ -56,7 +59,12 @@ UncodedPacket::UncodedPacket(int id, FiniteFieldVector* vector) {
 }
 
 UncodedPacket::~UncodedPacket(){
+
+	std::cout << "Distruttore UncodedPacket " <<std::endl;
+
 	delete [] payload;
+
+
 }
 
 
@@ -93,23 +101,63 @@ UncodedPacket* UncodedPacket::copy() {
 
 
 
-
 std::string UncodedPacket::toString() {
 
-	std::stringstream sstm;
+//	std::ostringstream os;
+//	os << "Hello test " << someint << ' ' << somestring;
+//	std::string buffer(os.str());
+
+
+	//std::stringstream sstm;
 
 	//TODO FIXME
 	//std::string ret = "Id: " + id + " Payload: ";
 
-	sstm << "Id: " << id << " Payload: ";
-	std::string ret = sstm.str();
+	//sstm << "Id: " << id << " Payload: ";
+	//std::string ret = sstm.str();
 
-	for (int k = 0; k < payload_length; k++) {
-		std::ostringstream oss;
-		oss << payload[k];
-		ret += " "+ oss.str();
-		//ret += String.format("%02X ", payload[k]);
-	}
+
+    char tmp[10];
+    char buffer[500];
+    buffer[0] = 0;
+    int len = 500;
+
+    snprintf(buffer, len, "ID: %d - " , this->id);
+
+    for (int i = 0 ; i < this->payload_length ; i++) {
+        snprintf(tmp, 10, "%02hhx ", this->payload[i]);
+
+        if ( strlen(buffer) + strlen(tmp) < len) {
+            strcat(buffer, tmp);
+        }
+    }
+
+
+    std::string ret(buffer);
+
+
+
+
+	//std::stringstream sstm;
+
+	//TODO FIXME
+	//std::string ret = "Id: " + id + " Payload: ";
+
+	//sstm << "Id: " << id << " Payload: ";
+	//std::string ret = sstm.str();
+
+
+
+
+//	for (int k = 0; k < payload_length; k++) {
+//		//std::ostringstream oss;
+//		//oss << payload[k];
+//		//ret += " "+ oss.str();
+//		printf(" %x ", payload[k]);
+//		//ret += std::string(reinterpret_cast<char>(payload[k]));
+//		//ret += String.format("%02X ", payload[k]);
+//	}
+	//printf(" \n");
 
 	return ret;
 }

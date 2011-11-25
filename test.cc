@@ -45,14 +45,19 @@ void block_level_example(){
 
 	/* create the uncoded packets */
 	//UncodedPacket[] inputPackets = new UncodedPacket[blockNumber];
-	std::vector<UncodedPacket> inputPackets;
+	std::vector<UncodedPacket*> inputPackets;
+	inputPackets.reserve(blockNumber);
 
 	for ( int i = 0 ; i < blockNumber ; i++) {
 		unsigned char* payload = new unsigned char[payloadLen];
+
 		std::fill(payload, payload+payloadLen, 0xA0+i);
-		//Arrays.fill(payload, (byte) (0XA0 +  i));
-		inputPackets.push_back(UncodedPacket(i, payload, payloadLen));
-		//std::cout<< "Uncodedpacket: " << i << ": "<< inputPackets[i].toString();
+			//Arrays.fill(payload, (byte) (0XA0 +  i));
+
+		inputPackets.push_back(new UncodedPacket(i, payload, payloadLen));
+
+		std::cout<< "Uncodedpacket: " << i << ": "<< inputPackets[i]->toString()<< std::endl;
+
 	}
 
 //
