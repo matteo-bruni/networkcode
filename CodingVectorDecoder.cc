@@ -42,7 +42,9 @@ CodingVectorDecoder::CodingVectorDecoder(int maxPackets, FiniteField* ff) {
 	memset(pivotPos, 0, maxPackets*sizeof(int) );
 
 	decoded = new bool[maxPackets];
+	memset(decoded, false, maxPackets*sizeof(bool) );
 	isPivot = new bool[maxPackets];
+	memset(isPivot, false, maxPackets*sizeof(bool) );
 
 	this->ff = ff;
 

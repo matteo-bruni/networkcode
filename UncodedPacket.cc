@@ -62,8 +62,12 @@ UncodedPacket::UncodedPacket(int id, FiniteFieldVector* vector) {
 UncodedPacket::~UncodedPacket(){
 
 	//std::cout << "Distruttore UncodedPacket " <<std::endl;
+	if (payload_length == 0){
+		delete payload;
+	} else {
+		delete [] payload;
+	}
 
-	delete [] payload;
 
 
 }

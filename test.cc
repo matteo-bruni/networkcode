@@ -41,7 +41,7 @@ void block_level_example(){
 
 	int blockNumber = 10;
 	int payloadLen = 10;
-	int payloadLenCoeffs = 20;
+	//int payloadLenCoeffs = 20;
 
 
 	/* create the uncoded packets */
@@ -102,6 +102,8 @@ void block_level_example(){
 	PacketDecoder decoder(ff, blockNumber, payloadLen);
 
 	std::cout << " Decoded Packet: " <<std::endl;
+
+	std::vector<UncodedPacket*> decoded_packets;
 	for ( int i = 0; i < blockNumber ; i++) {
 
 		std::vector<UncodedPacket*> packets = decoder.addPacket(networkOutput[i]);
@@ -110,16 +112,28 @@ void block_level_example(){
 		for (int j=0; j<packets.size(); j++) {
 			std::cout<< "Packet: "<< packets[j]->toString()<< std::endl;
 
-			// TODO:
+			// save decoded packets for later use
+			decoded_packets.push_back(packets[j]->copy());
+		}
+		for (int j=0; j<packets.size(); j++) {
+			// clear memory from temp pointers
 			delete packets[j];
+
 		}
 
 	}
 
+	std::cout << " We have decoded: "<< decoded_packets.size() << " packets"<<std::endl;
 
 
-
+	// free all memory
+	for ( int i = 0 ; i < blockNumber ; i++) {
+		delete inputPackets[i];
+		delete networkOutput[i];
+		delete decoded_packets[i];
+	}
 	delete ff;
+
 }
 
 
