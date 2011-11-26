@@ -106,13 +106,18 @@ void block_level_example(){
 
 		std::vector<UncodedPacket*> packets = decoder.addPacket(networkOutput[i]);
 		//printUncodedPackets(packets, payloadLen);
-		std::cout<< packets.size()<<std::endl;
-		for(std::vector<UncodedPacket*>::iterator it = packets.begin(); it != packets.end(); ++it) {
-			std::cout<< "Packet: "<< packets[i]->toString()<< std::endl;
+		//std::cout<< packets.size()<<std::endl;
+		for (int j=0; j<packets.size(); j++) {
+			std::cout<< "Packet: "<< packets[j]->toString()<< std::endl;
 
-		    /* std::cout << *it; ... */
+			// TODO:
+			delete packets[j];
 		}
+
 	}
+
+
+
 
 	delete ff;
 }

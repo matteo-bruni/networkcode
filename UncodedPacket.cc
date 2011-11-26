@@ -55,12 +55,13 @@ UncodedPacket::UncodedPacket(int id, FiniteFieldVector* vector) {
 
 	this->id = id;
 	this->payload = vector->getFiniteField()->vectorToBytes(vector);
-
+    this->payload_length = vector->getFiniteField()->bytesLength(vector->getLength());
+    		//ff_coordinates_to_bytes(payload->ff, payload->length);
 }
 
 UncodedPacket::~UncodedPacket(){
 
-	std::cout << "Distruttore UncodedPacket " <<std::endl;
+	//std::cout << "Distruttore UncodedPacket " <<std::endl;
 
 	delete [] payload;
 
@@ -110,6 +111,7 @@ std::string UncodedPacket::toString() {
 
     snprintf(buffer, len, "ID: %d - " , this->id);
 
+    //printf("paylen %u \n", payload_length );
     for (int i = 0 ; i < this->payload_length ; i++) {
         snprintf(tmp, 10, "%02hhx ", this->payload[i]);
 
