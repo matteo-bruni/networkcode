@@ -1,6 +1,7 @@
 #include <map>
 #include "ncutils.h"
 #include <iostream>
+#include <memory.h>
 
 ///**
 // *
@@ -34,14 +35,19 @@ CodingVectorDecoder::CodingVectorDecoder(int maxPackets, FiniteField* ff) {
 
 	for (int i = 0; i < maxPackets; i++) {
 		decodeMatrix[i] = new int[maxPackets * 2];
+		memset( decodeMatrix[i], 0, maxPackets*2*sizeof(int) );
 	}
 
 	pivotPos = new int[maxPackets];
+	memset(pivotPos, 0, maxPackets*sizeof(int) );
+
 	decoded = new bool[maxPackets];
 	isPivot = new bool[maxPackets];
+
 	this->ff = ff;
 
 }
+
 
 CodingVectorDecoder::~CodingVectorDecoder(){
 	//std::cout << "Distruttore CodingVectorDecoder " <<std::endl;

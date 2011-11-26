@@ -3,8 +3,7 @@
 #include <memory.h>
 #include <string>
 #include <sstream>
-
-
+#include <iomanip>
 #include <stdio.h>
 
 
@@ -200,10 +199,12 @@ void FiniteFieldVector::multiplyAndAddInPlace(int c, FiniteFieldVector* other) {
 
 }
 
+// TODO: implement osstring method
 std::string FiniteFieldVector::toString() {
 		std::string ret;
 		for ( int i = 0 ; i < this->length ; i++ ) {
 				std::ostringstream oss;
+				oss << std::setfill ('0') << std::setw (2);
 				oss << coordinates[i];
 				ret += " "+ oss.str();
 				//ret += (ret.length() != 0 ? " " : "") + String.format("%02d ", c); ;

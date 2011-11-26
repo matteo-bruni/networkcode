@@ -65,7 +65,7 @@ void block_level_example(){
 	std::cout << " Coded Packet: " <<std::endl;
 	for ( int i = 0 ; i < blockNumber ; i++) {
 		codewords.push_back(new CodedPacket( inputPackets[i], blockNumber, ff));
-		std::cout<< "Codedpacket: " << i << ": "<< codewords[i]->toString()<< std::endl;
+		std::cout<< "Packet: " << i << ": "<< codewords[i]->toString()<< std::endl;
 
 	}
 
@@ -94,7 +94,7 @@ void block_level_example(){
 
 			delete copy;
 		}
-		std::cout<< "Network Packet: " << i << ": "<< networkOutput[i]->toString()<< std::endl;
+		std::cout<< "Packet: " << i << ": "<< networkOutput[i]->toString()<< std::endl;
 
 	}
 
@@ -108,32 +108,13 @@ void block_level_example(){
 		//printUncodedPackets(packets, payloadLen);
 		std::cout<< packets.size()<<std::endl;
 		for(std::vector<UncodedPacket*>::iterator it = packets.begin(); it != packets.end(); ++it) {
-			std::cout<< "Decoded Packet: "<< packets[i]->toString()<< std::endl;
+			std::cout<< "Packet: "<< packets[i]->toString()<< std::endl;
 
 		    /* std::cout << *it; ... */
 		}
 	}
 
-
-
-//
-//	    }
-//
-//	    private static void printUncodedPackets(Iterable<UncodedPacket> packets, int payloadLen) {
-//	        for (UncodedPacket p : packets) {
-//	            System.out.println(p);
-//	        }
-//	    }
-//
-//	    private static void printCodedPackets(Iterable<CodedPacket> packets, int payloadLen) {
-//	        for (CodedPacket p : packets) {
-//	            System.out.println(p);
-//	        }
-//	    }
-//
-//	}
-
-
+	delete ff;
 }
 
 
