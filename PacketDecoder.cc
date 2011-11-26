@@ -17,7 +17,7 @@ PacketDecoder::PacketDecoder(FiniteField* field, int maxPackets, int payloadByte
 }
 
 PacketDecoder::~PacketDecoder(){
-	delete [] codingVectorDecoder;
+	delete codingVectorDecoder;
 }
 
 /**

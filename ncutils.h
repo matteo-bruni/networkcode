@@ -152,6 +152,7 @@ class CodedPacket {
 		CodedPacket(FiniteFieldVector* codingVector, FiniteFieldVector* payloadVector);
 		CodedPacket(UncodedPacket* packet, int maxPackets, FiniteField* ff);
 		CodedPacket(int maxPackets, int payloadByteLen, FiniteField* ff);
+
 		CodedPacket(int maxPackets, unsigned char* data, int offset, int length, FiniteField* ff);
 		~CodedPacket();
 

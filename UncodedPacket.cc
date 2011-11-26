@@ -103,20 +103,6 @@ UncodedPacket* UncodedPacket::copy() {
 
 std::string UncodedPacket::toString() {
 
-//	std::ostringstream os;
-//	os << "Hello test " << someint << ' ' << somestring;
-//	std::string buffer(os.str());
-
-
-	//std::stringstream sstm;
-
-	//TODO FIXME
-	//std::string ret = "Id: " + id + " Payload: ";
-
-	//sstm << "Id: " << id << " Payload: ";
-	//std::string ret = sstm.str();
-
-
     char tmp[10];
     char buffer[500];
     buffer[0] = 0;
@@ -134,30 +120,6 @@ std::string UncodedPacket::toString() {
 
 
     std::string ret(buffer);
-
-
-
-
-	//std::stringstream sstm;
-
-	//TODO FIXME
-	//std::string ret = "Id: " + id + " Payload: ";
-
-	//sstm << "Id: " << id << " Payload: ";
-	//std::string ret = sstm.str();
-
-
-
-
-//	for (int k = 0; k < payload_length; k++) {
-//		//std::ostringstream oss;
-//		//oss << payload[k];
-//		//ret += " "+ oss.str();
-//		printf(" %x ", payload[k]);
-//		//ret += std::string(reinterpret_cast<char>(payload[k]));
-//		//ret += String.format("%02X ", payload[k]);
-//	}
-	//printf(" \n");
 
 	return ret;
 }

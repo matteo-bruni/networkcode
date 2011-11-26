@@ -7,6 +7,7 @@
 #include <vector>
 #include <algorithm>
 #include <string>
+#include <cstdlib>
 
 void test_vectors();
 void block_level_example();
@@ -48,63 +49,73 @@ void block_level_example(){
 	std::vector<UncodedPacket*> inputPackets;
 	inputPackets.reserve(blockNumber);
 
+	std::cout << " Input blocks "<< std::endl;;
 	for ( int i = 0 ; i < blockNumber ; i++) {
 		unsigned char* payload = new unsigned char[payloadLen];
-
 		std::fill(payload, payload+payloadLen, 0xA0+i);
-			//Arrays.fill(payload, (byte) (0XA0 +  i));
-
 		inputPackets.push_back(new UncodedPacket(i, payload, payloadLen));
-
 		std::cout<< "Uncodedpacket: " << i << ": "<< inputPackets[i]->toString()<< std::endl;
+	}
+
+
+	/* prepare the input packets to be sent on the network */
+	std::vector<CodedPacket*> codewords;
+	codewords.reserve(blockNumber); //= new CodedPacket[blockNumber];
+
+	std::cout << " Coded Packet: " <<std::endl;
+	for ( int i = 0 ; i < blockNumber ; i++) {
+		codewords.push_back(new CodedPacket( inputPackets[i], blockNumber, ff));
+		std::cout<< "Codedpacket: " << i << ": "<< codewords[i]->toString()<< std::endl;
 
 	}
 
-//
-//	        System.out.println(" Input blocks: ");
-//	        printUncodedPackets(Arrays.asList(inputPackets), payloadLen);
-//
-//	        /* prepare the input packets to be sent on the network */
-//	        CodedPacket[] codewords = new CodedPacket[blockNumber];
-//
-//	        for ( int i = 0 ; i < blockNumber ; i++) {
-//	            codewords[i] = new CodedPacket( inputPackets[i], blockNumber, ff);
-//	        }
-//
-//	        System.out.println(" Codewords: ");
-//	        printCodedPackets(Arrays.asList(codewords), payloadLenCoeffs);
-//
-//	        /* create a set of linear combinations that simulate
-//	         * the output of the network
-//	         */
-//
-//	        CodedPacket[] networkOutput = new CodedPacket[blockNumber];
-//
-//	        Random r = new Random(2131231);
-//
-//	        for ( int i = 0 ; i < blockNumber ; i++) {
-//
-//	            networkOutput[i] = new CodedPacket(blockNumber, payloadLen, ff);
-//
-//	            for ( int j = 0 ; j < blockNumber ; j++) {
-//	                int x = r.nextInt(ff.getCardinality());
-//	                CodedPacket copy = codewords[j].scalarMultiply(x);
-//	                networkOutput[i] = networkOutput[i].add(copy);
-//
-//	            }
-//	        }
-//
-//	        System.out.println(" Network output: ");
-//	        printCodedPackets(Arrays.asList(networkOutput), payloadLenCoeffs);
-//
-//	        /* decode the received packets */
-//	        PacketDecoder decoder = new PacketDecoder(ff, blockNumber, payloadLen);
-//
-//	        System.out.println(" Decoded packets: ");
-//	        for ( int i = 0; i < blockNumber ; i++) {
-//	            Vector<UncodedPacket> packets = decoder.addPacket(networkOutput[i]);
-//	            printUncodedPackets(packets, payloadLen);
-//	        }
+
+
+	/* create a set of linear combinations that simulate
+	 * the output of the network
+	 */
+
+	std::vector<CodedPacket*> networkOutput;
+	networkOutput.reserve(blockNumber);
+	//= new CodedPacket[blockNumber];
+	srand(2131231);
+
+	//Random r = new Random(2131231);
+	std::cout << " Network Packet: " <<std::endl;
+	for ( int i = 0 ; i < blockNumber ; i++) {
+
+		networkOutput[i] = CodedPacket::createEmptyCodedPacket(blockNumber, payloadLen, ff);
+
+		for ( int j = 0 ; j < blockNumber ; j++) {
+			int x = rand()%ff->getCardinality(); // r.nextInt(ff.getCardinality());
+			CodedPacket* copy = codewords[j]->scalarMultiply(x);
+			networkOutput[i]->addInPlace(copy);
+			//networkOutput[i] = networkOutput[i]->add(copy);
+
+			delete copy;
+		}
+		std::cout<< "Network Packet: " << i << ": "<< networkOutput[i]->toString()<< std::endl;
+
+	}
+
+	/* decode the received packets */
+	PacketDecoder decoder(ff, blockNumber, payloadLen);
+
+	std::cout << " Decoded Packet: " <<std::endl;
+	for ( int i = 0; i < blockNumber ; i++) {
+
+		std::vector<UncodedPacket*> packets = decoder.addPacket(networkOutput[i]);
+		//printUncodedPackets(packets, payloadLen);
+		std::cout<< packets.size()<<std::endl;
+		for(std::vector<UncodedPacket*>::iterator it = packets.begin(); it != packets.end(); ++it) {
+			std::cout<< "Decoded Packet: "<< packets[i]->toString()<< std::endl;
+
+		    /* std::cout << *it; ... */
+		}
+	}
+
+
+
 //
 //	    }
 //

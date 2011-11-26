@@ -4,6 +4,10 @@
 #include <string>
 #include <sstream>
 
+
+#include <stdio.h>
+
+
 //#include "FiniteFieldVector.h"
 #include "ncutils.h"
 
@@ -17,6 +21,7 @@ FiniteFieldVector::FiniteFieldVector(int length, FiniteField* field) {
 	ff = field;
 	coordinates = new int[length];
 	this->length = length;
+	setToZero();
 }
 
 FiniteFieldVector::FiniteFieldVector(int coords[], int coords_len, FiniteField* field) {
@@ -26,8 +31,6 @@ FiniteFieldVector::FiniteFieldVector(int coords[], int coords_len, FiniteField* 
 }
 
 FiniteFieldVector::~FiniteFieldVector(){
-	std::cout << "Distruttore FiniteFieldVector " <<std::endl;
-
 	delete [] coordinates;
 }
 
@@ -62,7 +65,6 @@ void FiniteFieldVector::setCoordinate(int index, int value) {
 	assert(index >= 0);
 	assert(value < ff->getCardinality() && value >= 0);
 	assert(index <= length);
-
 	coordinates[index] = value;
 }
 

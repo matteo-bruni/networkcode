@@ -77,9 +77,6 @@ CodedPacket::CodedPacket(FiniteFieldVector* codingVector, FiniteFieldVector* pay
 }
 
 CodedPacket::~CodedPacket(){
-
-	std::cout << "Distruttore CodedPacket " <<std::endl;
-
 	delete coding_vector;
 	delete payload_vector;
 }

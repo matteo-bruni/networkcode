@@ -1,5 +1,6 @@
 #include <map>
 #include "ncutils.h"
+#include <iostream>
 
 ///**
 // *
@@ -26,6 +27,7 @@
  */
 CodingVectorDecoder::CodingVectorDecoder(int maxPackets, FiniteField* ff) {
 
+	this->packetCount = 0;
 	this->decodeMatrixLenght = maxPackets;
 
 	decodeMatrix = new int*[maxPackets];
@@ -42,7 +44,7 @@ CodingVectorDecoder::CodingVectorDecoder(int maxPackets, FiniteField* ff) {
 }
 
 CodingVectorDecoder::~CodingVectorDecoder(){
-	std::cout << "Distruttore CodingVectorDecoder " <<std::endl;
+	//std::cout << "Distruttore CodingVectorDecoder " <<std::endl;
 
 
 	for(int i = 0; i < decodeMatrixLenght; ++i){
@@ -53,6 +55,8 @@ CodingVectorDecoder::~CodingVectorDecoder(){
 	delete [] pivotPos;
 	delete [] isPivot;
 	delete [] decoded;
+
+	//std::cout << "finito " <<std::endl;
 }
 
 /**
@@ -94,21 +98,26 @@ std::map<int, FiniteFieldVector*> CodingVectorDecoder::addVector(FiniteFieldVect
 //	final int [][] sub = ff.sub;
 //	final int [][] div = ff.div;
 
+
+
 	int size = decodeMatrixLenght;
 	//int totalSize = decodeMatrix[0].length;
 	int totalSize = decodeMatrixLenght*2;
 
+
 	/* add the received packet at the bottom of the matrix */
 	for ( int i = 0 ; i < v->getLength() ; i++) {
+		//std::cout << "packetcount: "<< packetCount <<std::endl;
+		//std::cout << "coordinata "<< v->getCoordinate(i) <<std::endl;
 		decodeMatrix[packetCount][i] = v->getCoordinate(i);
 		decodeMatrix[packetCount][i+size] = 0 ;
 	}
+
 
 	/* put zeros on the inverse matrix but on position packet count*/
 	for ( int i = size ; i < totalSize ; i++) {
 		decodeMatrix[packetCount][i] = 0 ;
 	}
-
 
 
 	decodeMatrix[packetCount][size + packetCount] = 1;
