@@ -125,7 +125,7 @@ FiniteFieldVector* FiniteFieldVector::add(FiniteFieldVector* vector) {
 
 
 	for ( int i = 0 ; i < this->length ; i++ ) {
-		out->coordinates[i] = ff->sum[this->coordinates[i]][vector->coordinates[i]];
+		out->setCoordinate(i, ff->sum(this->coordinates[i], vector->getCoordinate(i)) );
 	}
 
 	return out;
@@ -138,7 +138,7 @@ void FiniteFieldVector::addInPlace(FiniteFieldVector* vector) {
 	assert(vector->length == this->length);
 
 	for ( int i = 0 ; i < this->length ; i++ ) {
-		coordinates[i] = ff->sum[coordinates[i]][vector->coordinates[i]];
+		coordinates[i] = ff->sum(coordinates[i], vector->getCoordinate(i));
 	}
 
 }
@@ -157,7 +157,7 @@ FiniteFieldVector* FiniteFieldVector::scalarMultiply(int c) {
 	FiniteFieldVector *out = new FiniteFieldVector(getLength(), ff);
 
 	for ( int i = 0 ; i < this->length ; i++ ) {
-		out->coordinates[i] = ff->mul[coordinates[i]][c];
+		out->setCoordinate(i, ff->mul(coordinates[i], c) );
 	}
 	return out;
 }
@@ -165,7 +165,7 @@ FiniteFieldVector* FiniteFieldVector::scalarMultiply(int c) {
 
 void FiniteFieldVector::scalarMultiplyInPlace(int c) {
 	for ( int i = 0 ; i < this->length ; i++ ) {
-		coordinates[i] = ff->mul[coordinates[i]][c];
+		coordinates[i] = ff->mul(coordinates[i],c);
 	}
 }
 
@@ -179,7 +179,7 @@ FiniteFieldVector* FiniteFieldVector::multiplyAndAdd(int c, FiniteFieldVector* o
 	FiniteFieldVector* out = new FiniteFieldVector(getLength(), ff);
 
 	for ( int i = 0 ; i < this->length ; i++ ) {
-		out->coordinates[i] = ff->sum[ff->mul[other->coordinates[i]][c]][coordinates[i]];
+		out->setCoordinate(i, ff->sum(ff->mul(other->getCoordinate(i),c), coordinates[i]) );
 	}
 
 	return out;
@@ -194,7 +194,7 @@ void FiniteFieldVector::multiplyAndAddInPlace(int c, FiniteFieldVector* other) {
 	assert(other->length == this->length);
 
 	for ( int i = 0 ; i < this->length ; i++ ) {
-		coordinates[i] = ff->sum[ff->mul[other->coordinates[i]][c]][coordinates[i]];
+		coordinates[i] = ff->sum( ff->mul(other->getCoordinate(i), c), coordinates[i]);
 	}
 
 }

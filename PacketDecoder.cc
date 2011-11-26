@@ -111,7 +111,7 @@ FiniteFieldVector* PacketDecoder::decodePayload(FiniteFieldVector* encoding) {
 		for (int c = 0; c < codedPayload->getLength(); c++) {
 			int v2 = codedPayload->getCoordinate(c); //coordinates2[c];
 			int v1 = decodedPayload->getCoordinate(c); //coordinates3[c];
-			int val = ff->sum[v1][ff->mul[coeff][v2]];
+			int val = ff->sum(v1, ff->mul(coeff, v2));
 			decodedPayload->setCoordinate(c, val); //coordinates3[c] = val;
 		}
 	}

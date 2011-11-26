@@ -14,38 +14,20 @@ class FiniteFieldVector;
 class FiniteField {
 
 	public:
-		/**
-		 * Associates each field element to its inverse
-		 */
-		int *inverse;
-
-		/**
-		 * Associate two field elements to their sum
-		 */
-		int **sum;
-
-		/**
-		 * Associate two field elements to their division
-		 */
-		int **div;
-
-		/**
-		 * Associate two field elements to their substraction
-		 */
-		int **sub;
-
-		/**
-		 * Associate two field elements to their multiplication
-		 */
-		int **mul;
-
-		// TODO: create sub() sum() div() mul() and keep var private
-
 
 		FiniteField(int q, int m);
 		FiniteField(int total_size);
 		~FiniteField();
 		static FiniteField* getDefaultFiniteField();
+
+
+		// TODO: create sub() sum() div() mul() and keep var private
+		int sum(int a, int b);
+		int sub(int a, int b);
+		int div(int a, int b);
+		int mul(int a, int b);
+
+
 
 //		FiniteFieldVector byteToVector(unsigned char *bytes, int bytes_lenght);
 //		FiniteFieldVector byteToVector(unsigned char *bytes, int bytes_lenght, int coordinates);
@@ -68,6 +50,30 @@ class FiniteField {
 		 * Total number of elements in the field
 		 */
 		int Q;
+		/**
+		 * Associates each field element to its inverse
+		 */
+		int *inverse;
+
+		/**
+		 * Associate two field elements to their sum
+		 */
+		int **_sum;
+
+		/**
+		 * Associate two field elements to their division
+		 */
+		int **_div;
+
+		/**
+		 * Associate two field elements to their substraction
+		 */
+		int **_sub;
+
+		/**
+		 * Associate two field elements to their multiplication
+		 */
+		int **_mul;
 
 
 };

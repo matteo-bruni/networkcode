@@ -44,16 +44,16 @@ FiniteField::FiniteField(int q, int m) {
 
 	inverse = new int[Q];
 
-	sum = new int*[Q];
-	mul = new int*[Q];
-	div = new int*[Q];
-	sub = new int*[Q];
+	_sum = new int*[Q];
+	_mul = new int*[Q];
+	_div = new int*[Q];
+	_sub = new int*[Q];
 
 	for (int i = 0; i < Q; i++) {
-		sum[i] = new int[Q];
-		mul[i] = new int[Q];
-		div[i] = new int[Q];
-		sub[i] = new int[Q];
+		_sum[i] = new int[Q];
+		_mul[i] = new int[Q];
+		_div[i] = new int[Q];
+		_sub[i] = new int[Q];
 	}
 
 
@@ -70,12 +70,12 @@ FiniteField::FiniteField(int q, int m) {
 			/*
 			 *  ^ = xor
 			 *  In a finite field with characteristic 2,
-			 *  addition modulo 2, subtraction modulo 2,
+			 *  addition modulo 2, _subtraction modulo 2,
 			 *  and XOR are identical.
 			 *
 			 */
-			sum[i][j] = i ^ j;
-			sub[i][j] = i ^ j;
+			_sum[i][j] = i ^ j;
+			_sub[i][j] = i ^ j;
 
 			int a = i;
 			int b = j;
@@ -95,7 +95,7 @@ FiniteField::FiniteField(int q, int m) {
 				b = b >> 1;
 			}
 
-			mul[i][j] = p;
+			_mul[i][j] = p;
 
 		}
 	}
@@ -103,14 +103,14 @@ FiniteField::FiniteField(int q, int m) {
 	for (int i = 0 ; i < Q ; i++) {
 		for (int j = 0 ; j < Q ; j++) {
 
-			div[mul[i][j]][i] = j;
-			div[mul[i][j]][j] = i;
+			_div[_mul[i][j]][i] = j;
+			_div[_mul[i][j]][j] = i;
 
 		}
 	}
 
 	for (int i = 1 ; i < Q ; i++) {
-		inverse[i] = div[1][i];
+		inverse[i] = _div[1][i];
 	}
 
 }
@@ -130,16 +130,16 @@ FiniteField::FiniteField(int total_size) {
 
 	inverse = new int[Q];
 
-	sum = new int*[Q];
-	mul = new int*[Q];
-	div = new int*[Q];
-	sub = new int*[Q];
+	_sum = new int*[Q];
+	_mul = new int*[Q];
+	_div = new int*[Q];
+	_sub = new int*[Q];
 
 	for (int i = 0; i < Q; i++) {
-		sum[i] = new int[Q];
-		mul[i] = new int[Q];
-		div[i] = new int[Q];
-		sub[i] = new int[Q];
+		_sum[i] = new int[Q];
+		_mul[i] = new int[Q];
+		_div[i] = new int[Q];
+		_sub[i] = new int[Q];
 	}
 
 	/* build inverse table */
@@ -155,10 +155,10 @@ FiniteField::FiniteField(int total_size) {
 	/* build tables */
 	for (int b = 0 ; b < Q ; b++) {
 			for (int i = 0 ; i < Q ; i++) {
-				sum[b][i] = (b+i) % Q;
-				sub[b][i] = (b-i+Q) % Q;
-				mul[b][i] = (b * i) % Q;
-				div[b][i] = (b * inverse[i]) % Q;
+				_sum[b][i] = (b+i) % Q;
+				_sub[b][i] = (b-i+Q) % Q;
+				_mul[b][i] = (b * i) % Q;
+				_div[b][i] = (b * inverse[i]) % Q;
 			}
 	}
 
@@ -167,18 +167,33 @@ FiniteField::FiniteField(int total_size) {
 FiniteField::~FiniteField(){
 
 	for(int i = 0; i < Q; ++i){
-		delete [] sum[i];
-		delete [] mul[i];
-		delete [] div[i];
-		delete [] sub[i];
+		delete [] _sum[i];
+		delete [] _mul[i];
+		delete [] _div[i];
+		delete [] _sub[i];
 	}
 
 	delete [] inverse;
-	delete [] sum;
-	delete [] mul;
-	delete [] div;
-	delete [] sub;
+	delete [] _sum;
+	delete [] _mul;
+	delete [] _div;
+	delete [] _sub;
 }
+
+
+int FiniteField::sum(int a, int b){
+	return _sum[a][b];
+}
+int FiniteField::sub(int a, int b){
+	return _sub[a][b];
+}
+int FiniteField::div(int a, int b){
+	return _div[a][b];
+}
+int FiniteField::mul(int a, int b){
+	return _mul[a][b];
+}
+
 
 
 /**

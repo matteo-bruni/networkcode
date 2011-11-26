@@ -140,7 +140,7 @@ std::map<int, FiniteFieldVector*> CodingVectorDecoder::addVector(FiniteFieldVect
 		for (int j = 0 ; j < totalSize ; j++) {
 			int val = decodeMatrix[packetCount][j];
 			int val2 = decodeMatrix[i][j];
-			decodeMatrix[packetCount][j] = ff->sub[val][ff->mul[val2][m]];
+			decodeMatrix[packetCount][j] = ff->sub(val, ff->mul(val2,m) );
 		}
 
 	}
@@ -171,7 +171,7 @@ std::map<int, FiniteFieldVector*> CodingVectorDecoder::addVector(FiniteFieldVect
 
 		for (int j = 0 ; j < totalSize ; j++) {
 				int val = decodeMatrix[packetCount][j];
-				decodeMatrix[packetCount][j] = ff->div[val][pval];
+				decodeMatrix[packetCount][j] = ff->div(val, pval);
 		}
 
 	}
@@ -188,7 +188,7 @@ std::map<int, FiniteFieldVector*> CodingVectorDecoder::addVector(FiniteFieldVect
 			int val2 = decodeMatrix[packetCount][j];
 			int val = decodeMatrix[i][j];
 
-			decodeMatrix[i][j] = ff->sub[val][ff->mul[val2][m]];
+			decodeMatrix[i][j] = ff->sub( val, ff->mul(val2, m) );
 
 		}
 
