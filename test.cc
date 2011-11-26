@@ -52,10 +52,16 @@ void block_level_example(){
 	std::cout << " Input blocks "<< std::endl;;
 	for ( int i = 0 ; i < blockNumber ; i++) {
 		unsigned char* payload = new unsigned char[payloadLen];
+
 		std::fill(payload, payload+payloadLen, 0xA0+i);
 		inputPackets.push_back(new UncodedPacket(i, payload, payloadLen));
 		std::cout<< "Uncodedpacket: " << i << ": "<< inputPackets[i]->toString()<< std::endl;
+
+		// free memory since uncodedpacket() creates a copy
+		delete [] payload;
 	}
+
+
 
 
 	/* prepare the input packets to be sent on the network */
@@ -64,7 +70,9 @@ void block_level_example(){
 
 	std::cout << " Coded Packet: " <<std::endl;
 	for ( int i = 0 ; i < blockNumber ; i++) {
+
 		codewords.push_back(new CodedPacket( inputPackets[i], blockNumber, ff));
+
 		std::cout<< "Packet: " << i << ": "<< codewords[i]->toString()<< std::endl;
 
 	}
@@ -114,6 +122,7 @@ void block_level_example(){
 
 			// save decoded packets for later use
 			decoded_packets.push_back(packets[j]->copy());
+
 		}
 		for (int j=0; j<packets.size(); j++) {
 			// clear memory from temp pointers
@@ -129,6 +138,7 @@ void block_level_example(){
 	// free all memory
 	for ( int i = 0 ; i < blockNumber ; i++) {
 		delete inputPackets[i];
+		delete codewords[i];
 		delete networkOutput[i];
 		delete decoded_packets[i];
 	}

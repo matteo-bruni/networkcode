@@ -131,6 +131,8 @@ class UncodedPacket {
 
 		int getId();
 		unsigned char* getPayload();
+		void setPayload(unsigned char* newpayload, int newlenght );
+
 		int getPayloadLength();
 		UncodedPacket* copy();
 

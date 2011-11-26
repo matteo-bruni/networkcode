@@ -91,14 +91,27 @@ int UncodedPacket::getId() {
 unsigned char* UncodedPacket::getPayload() {
 	return payload;
 }
+
+void UncodedPacket::setPayload(unsigned char* newpayload, int newlenght ) {
+	if (this->payload_length != 0){
+		delete [] payload;
+	}
+	this->payload = new unsigned char[newlenght];
+	memcpy(payload, newpayload, newlenght);
+	this->payload_length = newlenght;
+
+}
+
+
 int UncodedPacket::getPayloadLength(){
 	return payload_length;
 }
 
 UncodedPacket* UncodedPacket::copy() {
 
-	UncodedPacket* copy = new UncodedPacket(id, new unsigned char[payload_length], payload_length);
-	memcpy(copy->payload, payload, payload_length);
+	UncodedPacket* copy = new UncodedPacket(id);//, new unsigned char[payload_length], payload_length);
+	//memcpy(copy->payload, payload, payload_length);
+	copy->setPayload(payload, payload_length);
 
 	return copy;
 }

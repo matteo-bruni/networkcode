@@ -238,6 +238,11 @@ std::map<int, FiniteFieldVector*> CodingVectorDecoder::addVector(FiniteFieldVect
 
 			// TODO:
 			//willDecode.put(pos, vector);
+
+//			// remove if previously present
+//			if (willDecode[pos]){
+//				delete willDecode[pos];
+//			}
 			willDecode[pos] = vector;
 
 		}

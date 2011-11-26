@@ -55,11 +55,18 @@ std::vector<UncodedPacket*> PacketDecoder::addPacket(CodedPacket* p) {
 		for (iter = decoded.begin(); iter != decoded.end(); iter++) {
 
 			FiniteFieldVector* decodedPayload = decodePayload(iter->second);
+
 			output.push_back(new UncodedPacket(iter->first, decodedPayload));
 
-			//output.add(new UncodedPacket((int) entry.getKey(), decodedPayload));
-
+			// we create a copy
+			delete decodedPayload;
 		}
+
+		// free memory not used anymore
+		for (iter = decoded.begin(); iter != decoded.end(); iter++) {
+			delete iter->second;
+		}
+
 //		for ( Map.Entry<Integer, FiniteFieldVector> entry : decoded.entrySet() ) {
 //
 //			FiniteFieldVector decodedPayload = decodePayload(entry.getValue());
@@ -115,6 +122,7 @@ FiniteFieldVector* PacketDecoder::decodePayload(FiniteFieldVector* encoding) {
 			decodedPayload->setCoordinate(c, val); //coordinates3[c] = val;
 		}
 	}
+
 	return decodedPayload;
 }
 
