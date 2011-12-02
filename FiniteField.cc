@@ -36,6 +36,9 @@ FiniteField::FiniteField(int q, int m) {
 
 	// TODO: check m and q
 
+    //if (q < 1 || m < 0) throw cRuntimeError("Array of size %d indexed by %d", msg_arraysize, k);
+    //if (q != 2 || m > 16) throw cRuntimeError("Array of size %d indexed by %d", msg_arraysize, k);
+
 	//if (q < 1 || m < 0) throw new RuntimeException("Invalid field size");
 	//if (q != 2 || m > 16) throw new UnsupportedOperationException("Finite field not supported");
 
@@ -224,44 +227,6 @@ FiniteFieldVector* FiniteField::byteToVector(unsigned char *bytes, int bytes_len
 }
 
 
-///**
-// * Convert a byte array to its finite field vector representation
-// *
-// * @param bytes an array of bytes
-// * @param coordinates how many coordinates should be read
-// * @return the representation of the array as a vector
-// */
-//FiniteFieldVector FiniteField::byteToVector(unsigned char *bytes, int bytes_lenght, int coordinates) {
-//	return byteToVector(bytes, 0, bytes_lenght, bytes_lenght, coordinates);
-//}
-//
-//// TODO: inutilizzata
-////FiniteFieldVector* FiniteField::byteToVector(unsigned char *bytes, int bytes_lenght, int offset) {
-////	return byteToVector(bytes, offset, bytes_lenght, coordinatesCount(bytes_length));
-////}
-//
-///**
-// * Convert a byte array to its finite field vector representation
-// *
-// * @param bytes an array of bytes
-// * @param offset the offset of the first byte to be converted
-// * @param length the number of bytes that must be converted
-// * @return the representation of the array as a vector
-// */
-//FiniteFieldVector FiniteField::byteToVector(unsigned char *bytes, int offset, int bytes_lenght, int coordinates) {
-//
-//	int *data = new int[coordinates];
-//
-//	int bits_per_field = bitsPerCoordinate();
-//
-//	for ( int i = 0 ; i < coordinates; i++) {
-//		data[i] = readBits(bytes, bytes_lenght, offset, i, bits_per_field);
-//	}
-//
-//    return new FiniteFieldVector(data, this);
-//
-//}
-
 
 int FiniteField::readBits(unsigned char* data, int data_lenght, int offset, int field, int fieldSize) {
 
@@ -406,7 +371,7 @@ int FiniteField::getCardinality() {
 
 
 
-////// TODO: servono?
+////// TODO: sstream da fare, l'hash va fatto?
 //
 //    @Override
 //    public boolean equals(Object obj) {

@@ -109,7 +109,6 @@ FiniteFieldVector* PacketDecoder::decodePayload(FiniteFieldVector* encoding) {
 			continue;
 		}
 
-		// TODO: DECIDI COME USARLI
 		FiniteFieldVector* codedPayload = packets[codedPacketId]->getPayloadVector();
 
 		//int[] coordinates2 = codedPayload.coordinates;

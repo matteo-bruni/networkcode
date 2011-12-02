@@ -85,8 +85,12 @@ void block_level_example(){
 
 	std::vector<CodedPacket*> networkOutput;
 	networkOutput.reserve(blockNumber);
-	//= new CodedPacket[blockNumber];
-	srand(2131231);
+
+
+	//int temp_time = time(NULL);
+	srand(1322825377);//1322825321 //897563);//2131231);
+	//std::cout<<"TEMP TIME: "<<temp_time<<std::endl;
+
 
 	//Random r = new Random(2131231);
 	std::cout << " Network Packet: " <<std::endl;
@@ -117,8 +121,9 @@ void block_level_example(){
 		std::vector<UncodedPacket*> packets = decoder.addPacket(networkOutput[i]);
 		//printUncodedPackets(packets, payloadLen);
 		//std::cout<< packets.size()<<std::endl;
+		std::cout<< "Recived packets: "<<i<< ". Decoded packets thanks this reception:" <<std::endl;
 		for (int j=0; j<packets.size(); j++) {
-			std::cout<< "Packet: "<< packets[j]->toString()<< std::endl;
+			std::cout<< "	Packet: "<< packets[j]->toString()<< std::endl;
 
 			// save decoded packets for later use
 			decoded_packets.push_back(packets[j]->copy());

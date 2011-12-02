@@ -196,14 +196,9 @@ std::map<int, FiniteFieldVector*> CodingVectorDecoder::addVector(FiniteFieldVect
 
 	}
 
-	////////////////////////////////////////////////////////////////////////////////////////////
-
 	packetCount++;
 
 	/* look for decodable blocks */
-
-	//HashMap<Integer,FiniteFieldVector> willDecode =
-	//				new HashMap<Integer, FiniteFieldVector>();
 
 	std::map<int, FiniteFieldVector*> willDecode;
 

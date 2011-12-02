@@ -1,4 +1,9 @@
 
+
+#ifndef __NCUTILS_omnet_h__
+
+#define __NCUTILS_omnet_h__
+
 #include <string>
 #include <map>
 #include <vector>
@@ -287,5 +292,5 @@ class PacketDecoder {
 
 };
 
-
+#endif
 
