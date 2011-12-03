@@ -81,6 +81,11 @@ CodedPacket::~CodedPacket(){
 	delete payload_vector;
 }
 
+CodedPacket::CodedPacket(const CodedPacket& p){
+	this->coding_vector = p.coding_vector->copy();
+	this->payload_vector = p.payload_vector->copy();
+}
+
 
 /**
  * Returns the coding vector of this packet. The coding vector describes
