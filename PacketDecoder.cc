@@ -29,6 +29,17 @@ PacketDecoder::PacketDecoder(const PacketDecoder& p){
 	codingVectorDecoder = p.codingVectorDecoder->copy();
 }
 
+PacketDecoder& PacketDecoder::operator= (const PacketDecoder & p){
+	// check for self-assignment
+	if (this == &p)
+		return *this;
+
+	payloadCoordinatesCount = p.payloadCoordinatesCount;
+	packets = p.packets;
+	ff = p.ff;
+
+	codingVectorDecoder = p.codingVectorDecoder->copy();
+}
 
 /**
  *

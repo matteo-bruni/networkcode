@@ -287,6 +287,8 @@ class PacketDecoder {
 
 		~PacketDecoder();
 
+		PacketDecoder& operator= (const PacketDecoder & p);
+
 		int getSubspaceSize();
 		int getMaxPackets();
 		std::vector<UncodedPacket*> addPacket(CodedPacket* p);
