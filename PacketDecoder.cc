@@ -39,6 +39,9 @@ PacketDecoder& PacketDecoder::operator= (const PacketDecoder & p){
 	ff = p.ff;
 
 	codingVectorDecoder = p.codingVectorDecoder->copy();
+
+	return *this;
+
 }
 
 /**
