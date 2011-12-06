@@ -68,6 +68,30 @@ CodingVectorDecoder::~CodingVectorDecoder(){
 }
 
 /**
+ * Creates a copy of the vector
+ *
+ * @return a copy of the vector
+ */
+CodingVectorDecoder* CodingVectorDecoder::copy(){
+
+	CodingVectorDecoder* vector = new CodingVectorDecoder(decodeMatrixLenght, ff);
+
+
+	for (int i = 0; i < decodeMatrixLenght; i++) {
+		memcpy( vector->decodeMatrix[i], this->decodeMatrix[i], decodeMatrixLenght*2*sizeof(int) );
+	}
+
+	memcpy(vector->pivotPos, this->pivotPos, decodeMatrixLenght*sizeof(int) );
+	memcpy(vector->decoded, this->decoded, decodeMatrixLenght*sizeof(bool) );
+	memcpy(vector->isPivot, this->isPivot, decodeMatrixLenght*sizeof(bool) );
+
+	vector->packetCount = this->packetCount;
+
+	return vector;
+
+}
+
+/**
  * Returns the maximum number of packets that can be combined (i.e. the
  * length of the coding vectors being decoded)
  *

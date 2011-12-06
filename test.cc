@@ -96,7 +96,7 @@ void block_level_example(){
 	std::cout << " Network Packet: " <<std::endl;
 	for ( int i = 0 ; i < blockNumber ; i++) {
 
-		networkOutput[i] = CodedPacket::createEmptyCodedPacket(blockNumber, payloadLen, ff);
+		networkOutput[i] = CodedPacket::createEmptyCodedPacketPtr(blockNumber, payloadLen, ff);
 
 		for ( int j = 0 ; j < blockNumber ; j++) {
 			int x = rand()%ff->getCardinality(); // r.nextInt(ff.getCardinality());

@@ -38,7 +38,7 @@ CodedPacket::CodedPacket( UncodedPacket* packet, int max_packets, FiniteField* f
  * @param ff The finite field that over which the vectors in the packet are
  * defined
  */
-CodedPacket* CodedPacket::createEmptyCodedPacket(int max_packets, int payload_byte_lenght, FiniteField* ff) {
+CodedPacket* CodedPacket::createEmptyCodedPacketPtr(int max_packets, int payload_byte_lenght, FiniteField* ff) {
 
 	return new CodedPacket(new FiniteFieldVector(max_packets, ff), new FiniteFieldVector(ff->coordinatesCount(payload_byte_lenght), ff));
 

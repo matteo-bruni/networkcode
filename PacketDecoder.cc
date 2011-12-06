@@ -1,5 +1,6 @@
 #include "ncutils.h"
 #include <assert.h>
+#include <vector>
 
 /**
  * Constructs a new PacketDecoder.
@@ -19,6 +20,15 @@ PacketDecoder::PacketDecoder(FiniteField* field, int maxPackets, int payloadByte
 PacketDecoder::~PacketDecoder(){
 	delete codingVectorDecoder;
 }
+
+
+PacketDecoder::PacketDecoder(const PacketDecoder& p){
+	payloadCoordinatesCount = p.payloadCoordinatesCount;
+	packets = p.packets;
+	ff = p.ff;
+	codingVectorDecoder = p.codingVectorDecoder->copy();
+}
+
 
 /**
  *

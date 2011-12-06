@@ -164,13 +164,14 @@ class CodedPacket {
 
 		CodedPacket(FiniteFieldVector* codingVector, FiniteFieldVector* payloadVector);
 		CodedPacket(UncodedPacket* packet, int maxPackets, FiniteField* ff);
-		CodedPacket(int maxPackets, int payloadByteLen, FiniteField* ff);
+		//CodedPacket(int maxPackets, int payloadByteLen, FiniteField* ff);
+		CodedPacket(const CodedPacket& p);
 
 		CodedPacket(int maxPackets, unsigned char* data, int offset, int length, FiniteField* ff);
 		~CodedPacket();
 
 
-		static CodedPacket* createEmptyCodedPacket(int max_packets, int payload_byte_lenght, FiniteField* ff);
+		static CodedPacket* createEmptyCodedPacketPtr(int max_packets, int payload_byte_lenght, FiniteField* ff);
 
 		FiniteFieldVector* getCodingVector();
 		FiniteFieldVector* getPayloadVector();
@@ -220,6 +221,8 @@ class CodingVectorDecoder {
 	public:
 		CodingVectorDecoder(int maxPackets, FiniteField* ff);
 		~CodingVectorDecoder();
+
+		CodingVectorDecoder* copy();
 
 		int getMaxPackets();
 		int getSubspaceSize();
@@ -274,6 +277,8 @@ class PacketDecoder {
 
 	public:
 		PacketDecoder(FiniteField* field, int maxPackets, int payloadBytesLength);
+		PacketDecoder(const PacketDecoder& p);
+
 		~PacketDecoder();
 
 		int getSubspaceSize();
