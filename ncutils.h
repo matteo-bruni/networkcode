@@ -221,6 +221,9 @@ class CodingVectorDecoder {
 	public:
 		CodingVectorDecoder(int maxPackets, FiniteField* ff);
 		~CodingVectorDecoder();
+		CodingVectorDecoder(const CodingVectorDecoder& other);
+
+
 
 		CodingVectorDecoder* copy();
 
@@ -231,6 +234,9 @@ class CodingVectorDecoder {
 
 
 	private:
+
+		void initVars();
+
 		/* the matrix used for gaussian jordan elimination, the first half of the
 		 * columns store the matrix being inverted the second half the inverted
 		 * matrix.

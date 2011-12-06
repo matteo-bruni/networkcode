@@ -31,23 +31,28 @@ CodingVectorDecoder::CodingVectorDecoder(int maxPackets, FiniteField* ff) {
 	this->packetCount = 0;
 	this->decodeMatrixLenght = maxPackets;
 
-	decodeMatrix = new int*[maxPackets];
-
-	for (int i = 0; i < maxPackets; i++) {
-		decodeMatrix[i] = new int[maxPackets * 2];
-		memset( decodeMatrix[i], 0, maxPackets*2*sizeof(int) );
-	}
-
-	pivotPos = new int[maxPackets];
-	memset(pivotPos, 0, maxPackets*sizeof(int) );
-
-	decoded = new bool[maxPackets];
-	memset(decoded, false, maxPackets*sizeof(bool) );
-	isPivot = new bool[maxPackets];
-	memset(isPivot, false, maxPackets*sizeof(bool) );
+	initVars();
 
 	this->ff = ff;
 
+}
+
+void CodingVectorDecoder::initVars(){
+
+	decodeMatrix = new int*[decodeMatrixLenght];
+
+	for (int i = 0; i < decodeMatrixLenght; i++) {
+		decodeMatrix[i] = new int[decodeMatrixLenght * 2];
+		memset( decodeMatrix[i], 0, decodeMatrixLenght*2*sizeof(int) );
+	}
+
+	pivotPos = new int[decodeMatrixLenght];
+	memset(pivotPos, 0, decodeMatrixLenght*sizeof(int) );
+
+	decoded = new bool[decodeMatrixLenght];
+	memset(decoded, false, decodeMatrixLenght*sizeof(bool) );
+	isPivot = new bool[decodeMatrixLenght];
+	memset(isPivot, false, decodeMatrixLenght*sizeof(bool) );
 }
 
 
@@ -65,6 +70,30 @@ CodingVectorDecoder::~CodingVectorDecoder(){
 	delete [] decoded;
 
 	//std::cout << "finito " <<std::endl;
+}
+
+/*
+ * Copy Constructor
+ */
+CodingVectorDecoder::CodingVectorDecoder(const CodingVectorDecoder& other){
+
+	this->packetCount = other.packetCount;
+
+	this->decodeMatrixLenght = other.decodeMatrixLenght;
+
+	initVars();
+
+	this->ff = other.ff;
+
+
+	for (int i = 0; i < decodeMatrixLenght; i++) {
+		memcpy( this->decodeMatrix[i], other.decodeMatrix[i], decodeMatrixLenght*2*sizeof(int) );
+	}
+
+	memcpy(this->pivotPos, other.pivotPos, decodeMatrixLenght*sizeof(int) );
+	memcpy(this->decoded, other.decoded, decodeMatrixLenght*sizeof(bool) );
+	memcpy(this->isPivot, other.isPivot, decodeMatrixLenght*sizeof(bool) );
+
 }
 
 /**
@@ -88,8 +117,9 @@ CodingVectorDecoder* CodingVectorDecoder::copy(){
 	vector->packetCount = this->packetCount;
 
 	return vector;
-
 }
+
+
 
 /**
  * Returns the maximum number of packets that can be combined (i.e. the
