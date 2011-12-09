@@ -9,14 +9,17 @@
 #include <string>
 #include <cstdlib>
 
+#define TEST_LEN 10
+
 void test_vectors();
 void block_level_example();
-
+void test_coding_vectors();
 
 int main() {
 
 	//test_vectors();
-	block_level_example();
+	test_coding_vectors();
+	//block_level_example();
 
 
 	return 0;
@@ -72,6 +75,7 @@ void block_level_example(){
 	for ( int i = 0 ; i < blockNumber ; i++) {
 
 		codewords.push_back(new CodedPacket( inputPackets[i], blockNumber, ff));
+		delete inputPackets[i];
 
 		std::cout<< "Packet: " << i << ": "<< codewords[i]->toString()<< std::endl;
 
@@ -142,7 +146,7 @@ void block_level_example(){
 
 	// free all memory
 	for ( int i = 0 ; i < blockNumber ; i++) {
-		delete inputPackets[i];
+//		delete inputPackets[i];
 		delete codewords[i];
 		delete networkOutput[i];
 		delete decoded_packets[i];
@@ -151,15 +155,70 @@ void block_level_example(){
 
 }
 
+void test_coding_vectors(){
+
+    FiniteField* ff = new FiniteField(2,4);
+
+
+	FiniteFieldVector* coding_vector = new FiniteFieldVector(1, ff);
+
+	coding_vector->setCoordinate(0,5);
+
+	std::cout<< " vector representation: " <<std::endl;
+
+	std::cout << coding_vector->toString() <<std::endl;
+
+	unsigned char* coding_vector_bytes = ff->vectorToBytes(coding_vector);
+	int cv_byte_len = ff->bytesLength(coding_vector->getLength());
+
+	std::cout<< " vector to byte representation: " <<std::endl;
+    printf("Hex representation \n <  ");
+    for ( int i=0 ; i<cv_byte_len; i++){
+    	if ( i == cv_byte_len - 1){
+        	printf(" %x >", coding_vector_bytes[i]);
+    	} else {
+        	printf(" %x, ", coding_vector_bytes[i]);
+    	}
+
+    }
+    printf("\n\n");
+
+
+	std::cout<< " Get back the original vector" <<std::endl;
+
+	FiniteFieldVector* back = ff->byteToVector(coding_vector_bytes, cv_byte_len);
+
+	std::cout<< " wrong vector: " <<std::endl;
+
+	std::cout<< back->toString() <<std::endl;
+
+	std::cout<< " right vector: " <<std::endl;
+
+	FiniteFieldVector* back_cv = ff->byteToCodingVector(coding_vector_bytes, cv_byte_len);
+
+	std::cout<< back_cv->toString() <<std::endl;
+
+
+	delete back_cv;
+	delete back;
+	delete coding_vector;
+	delete ff;
+}
 
 void test_vectors(){
+	/*
+	 * This example show how to convert a payload in its finite field
+	 * vector representation and how to obtain the payload from the ff vector
+	 *
+	 */
 
-    unsigned char payload[10] = {0xa0, 0xb1, 0xc2,0x53,0x4,0x5,0x6, 0x7, 0x8, 0xac};
+    unsigned char payload[TEST_LEN] = {0xa0, 0xb1, 0xc2,0x53,0x4,0x5,0x6, 0x7, 0x8, 0xac};
 
+    //unsigned char payload[TEST_LEN] = {0xa0};
 
     printf("\n\n Hex representation \n <  ");
-    for ( int i=0 ; i<10; i++){
-    	if ( i == 9 ){
+    for ( int i=0 ; i<TEST_LEN; i++){
+    	if ( i == TEST_LEN-1 ){
         	printf(" %x >", payload[i]);
     	} else {
         	printf(" %x, ", payload[i]);
@@ -170,8 +229,8 @@ void test_vectors(){
 
 
     printf(" Bit representation \n <  ");
-    for ( int i=0 ; i<10; i++){
-    	if ( i == 9 ){
+    for ( int i=0 ; i<TEST_LEN; i++){
+    	if ( i == TEST_LEN - 1 ){
     		std::cout << std::bitset<8>(payload[i])<< " >" << std::endl;
     	} else {
     		std::cout << std::bitset<8>(payload[i])<< ", ";
@@ -184,7 +243,7 @@ void test_vectors(){
 
     FiniteField* field = new FiniteField(2,4);
 
-    FiniteFieldVector* vector = field->byteToVector(payload, 10);
+    FiniteFieldVector* vector = field->byteToVector(payload, TEST_LEN );
 
     printf("creating a finitefield vector with %u elements \n", vector->getLength());
 
@@ -211,8 +270,8 @@ void test_vectors(){
 
 
     printf("\n\n Hex representation \n <  ");
-    for ( int i=0 ; i<10; i++){
-    	if ( i == 9 ){
+    for ( int i=0 ; i<TEST_LEN; i++){
+    	if ( i == TEST_LEN -1 ){
         	printf(" %x >", back[i]);
     	} else {
         	printf(" %x, ", back[i]);
@@ -223,8 +282,8 @@ void test_vectors(){
 
 
     printf(" Bit representation \n <  ");
-    for ( int i=0 ; i<10; i++){
-    	if ( i == 9 ){
+    for ( int i=0 ; i<TEST_LEN; i++){
+    	if ( i == TEST_LEN -1  ){
     		std::cout << std::bitset<8>(back[i])<< " >" << std::endl;
     	} else {
     		std::cout << std::bitset<8>(back[i])<< ", ";

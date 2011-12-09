@@ -39,6 +39,7 @@ class FiniteField {
 //		FiniteFieldVector byteToVector(unsigned char *bytes, int offset, int bytes_lenght, int coordinates);
 
 		FiniteFieldVector* byteToVector(unsigned char *bytes, int bytes_lenght, int offset = 0);
+
 		int readBits(unsigned char* data, int data_lenght, int offset, int field, int fieldSize);
 
 		unsigned char* vectorToBytes(FiniteFieldVector* vector);
