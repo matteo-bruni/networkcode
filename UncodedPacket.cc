@@ -35,7 +35,7 @@ UncodedPacket::UncodedPacket(int id) {
  * @param id the id of the packet
  * @param payload the payload
  */
-UncodedPacket::UncodedPacket(int id, unsigned char* payload_vector, int length) {
+UncodedPacket::UncodedPacket(int id, unsigned char* payload_vector, unsigned int length) {
 	this->id = id;
 	this->payload = new unsigned char[length];
 	memcpy(this->payload, payload_vector, length);
@@ -62,13 +62,11 @@ UncodedPacket::UncodedPacket(int id, FiniteFieldVector* vector) {
 UncodedPacket::~UncodedPacket(){
 
 	//std::cout << "Distruttore UncodedPacket " <<std::endl;
-	if (payload_length == 0){
-		delete payload;
-	} else {
-		delete [] payload;
-	}
-
-
+//	if (payload_length == 0){
+//		delete payload;
+//	} else {
+	delete [] payload;
+	//}
 
 }
 
@@ -103,7 +101,7 @@ void UncodedPacket::setPayload(unsigned char* newpayload, int newlenght ) {
 }
 
 
-int UncodedPacket::getPayloadLength(){
+unsigned int UncodedPacket::getPayloadLength(){
 	return payload_length;
 }
 
@@ -124,12 +122,12 @@ std::string UncodedPacket::toString() {
     char tmp[10];
     char buffer[500];
     buffer[0] = 0;
-    int len = 500;
+    unsigned int len = 500;
 
     snprintf(buffer, len, "ID: %d - " , this->id);
 
     //printf("paylen %u \n", payload_length );
-    for (int i = 0 ; i < this->payload_length ; i++) {
+    for (unsigned int i = 0 ; i < this->payload_length ; i++) {
         snprintf(tmp, 10, "%02hhx ", this->payload[i]);
 
         if ( strlen(buffer) + strlen(tmp) < len) {

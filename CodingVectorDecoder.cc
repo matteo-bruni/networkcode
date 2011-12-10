@@ -26,7 +26,7 @@
  * @param maxPackets the length of the vectors have to be decoded
  * @param ff the finite field used in the decoder
  */
-CodingVectorDecoder::CodingVectorDecoder(int maxPackets, FiniteField* ff) {
+CodingVectorDecoder::CodingVectorDecoder(unsigned int maxPackets, FiniteField* ff) {
 
 	this->packetCount = 0;
 	this->decodeMatrixLenght = maxPackets;
@@ -41,7 +41,7 @@ void CodingVectorDecoder::initVars(){
 
 	decodeMatrix = new int*[decodeMatrixLenght];
 
-	for (int i = 0; i < decodeMatrixLenght; i++) {
+	for (unsigned int i = 0; i < decodeMatrixLenght; i++) {
 		decodeMatrix[i] = new int[decodeMatrixLenght * 2];
 		memset( decodeMatrix[i], 0, decodeMatrixLenght*2*sizeof(int) );
 	}
@@ -60,7 +60,7 @@ CodingVectorDecoder::~CodingVectorDecoder(){
 	//std::cout << "Distruttore CodingVectorDecoder " <<std::endl;
 
 
-	for(int i = 0; i < decodeMatrixLenght; ++i){
+	for(unsigned int i = 0; i < decodeMatrixLenght; ++i){
 		delete [] decodeMatrix[i];
 	}
 
@@ -86,7 +86,7 @@ CodingVectorDecoder::CodingVectorDecoder(const CodingVectorDecoder& other){
 	this->ff = other.ff;
 
 
-	for (int i = 0; i < decodeMatrixLenght; i++) {
+	for (unsigned int i = 0; i < decodeMatrixLenght; i++) {
 		memcpy( this->decodeMatrix[i], other.decodeMatrix[i], decodeMatrixLenght*2*sizeof(int) );
 	}
 
@@ -106,7 +106,7 @@ CodingVectorDecoder* CodingVectorDecoder::copy(){
 	CodingVectorDecoder* vector = new CodingVectorDecoder(decodeMatrixLenght, ff);
 
 
-	for (int i = 0; i < decodeMatrixLenght; i++) {
+	for (unsigned int i = 0; i < decodeMatrixLenght; i++) {
 		memcpy( vector->decodeMatrix[i], this->decodeMatrix[i], decodeMatrixLenght*2*sizeof(int) );
 	}
 
@@ -127,7 +127,7 @@ CodingVectorDecoder* CodingVectorDecoder::copy(){
  *
  * @return the number of packets supported
  */
-int CodingVectorDecoder::getMaxPackets() {
+unsigned int CodingVectorDecoder::getMaxPackets() {
 	//return decodeMatrix.length;
 	return decodeMatrixLenght;
 }
@@ -168,7 +168,7 @@ std::map<int, FiniteFieldVector*> CodingVectorDecoder::addVector(FiniteFieldVect
 
 
 	/* add the received packet at the bottom of the matrix */
-	for ( int i = 0 ; i < v->getLength() ; i++) {
+	for (unsigned int i = 0 ; i < v->getLength() ; i++) {
 		//std::cout << "packetcount: "<< packetCount <<std::endl;
 		//std::cout << "coordinata "<< v->getCoordinate(i) <<std::endl;
 		decodeMatrix[packetCount][i] = v->getCoordinate(i);
@@ -188,7 +188,7 @@ std::map<int, FiniteFieldVector*> CodingVectorDecoder::addVector(FiniteFieldVect
 	/* simplify the new packet */
 
 	/* zeros before */
-	for (int i = 0 ; i < packetCount ; i++)  {
+	for (unsigned int i = 0 ; i < packetCount ; i++)  {
 
 		int m = decodeMatrix[packetCount][pivotPos[i]];
 		if (m == 0) continue;
@@ -233,7 +233,7 @@ std::map<int, FiniteFieldVector*> CodingVectorDecoder::addVector(FiniteFieldVect
 	}
 
 	/* zero the column above the pivot */
-	for ( int i = 0 ; i < packetCount ; i++ ) {
+	for (unsigned int i = 0 ; i < packetCount ; i++ ) {
 
 		int m = decodeMatrix[i][pivot];
 
@@ -256,7 +256,7 @@ std::map<int, FiniteFieldVector*> CodingVectorDecoder::addVector(FiniteFieldVect
 
 	std::map<int, FiniteFieldVector*> willDecode;
 
-	for ( int i = 0; i < packetCount ; i++) {
+	for (unsigned int i = 0; i < packetCount ; i++) {
 		int pos = -1;
 
 		/* skip if the line is marked decoded */

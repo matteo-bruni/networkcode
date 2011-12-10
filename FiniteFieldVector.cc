@@ -16,14 +16,14 @@
  * @param length the number of coordinates of the vector
  * @param ff the finite field used to define the vector
  */
-FiniteFieldVector::FiniteFieldVector(int length, FiniteField* field) {
+FiniteFieldVector::FiniteFieldVector(unsigned int length, FiniteField* field) {
 	ff = field;
 	coordinates = new int[length];
 	this->length = length;
 	setToZero();
 }
 
-FiniteFieldVector::FiniteFieldVector(int coords[], int coords_len, FiniteField* field) {
+FiniteFieldVector::FiniteFieldVector(int coords[], unsigned int coords_len, FiniteField* field) {
 	ff = field;
 	coordinates = coords;
 	this->length = coords_len;
@@ -38,7 +38,7 @@ FiniteFieldVector::~FiniteFieldVector(){
  *
  * @return the length of the vector
  */
-int FiniteFieldVector::getLength() {
+unsigned int FiniteFieldVector::getLength() {
 	return length;
 }
 
@@ -59,7 +59,7 @@ FiniteField* FiniteFieldVector::getFiniteField() {
  * @param value the value of the coordinate, must be an element of
  * the finite field where the vector has been defined
  */
-void FiniteFieldVector::setCoordinate(int index, int value) {
+void FiniteFieldVector::setCoordinate(unsigned int index, int value) {
 
 	assert(index >= 0);
 	assert(value < ff->getCardinality() && value >= 0);
@@ -75,7 +75,7 @@ void FiniteFieldVector::setCoordinate(int index, int value) {
  * @param index the index of the coordinate (starts at 0)
  * @return an element of the finite field used to define this vector
  */
-int FiniteFieldVector::getCoordinate(int index) {
+int FiniteFieldVector::getCoordinate(unsigned int index) {
 
 	assert(index >= 0);
 	assert(index <= length);
@@ -124,7 +124,7 @@ FiniteFieldVector* FiniteFieldVector::add(FiniteFieldVector* vector) {
 	FiniteFieldVector *out = new FiniteFieldVector(getLength(), ff);
 
 
-	for ( int i = 0 ; i < this->length ; i++ ) {
+	for ( unsigned int i = 0 ; i < this->length ; i++ ) {
 		out->setCoordinate(i, ff->sum(this->coordinates[i], vector->getCoordinate(i)) );
 	}
 
@@ -137,7 +137,7 @@ void FiniteFieldVector::addInPlace(FiniteFieldVector* vector) {
 	assert(vector->getFiniteField()->getCardinality() == ff->getCardinality());
 	assert(vector->length == this->length);
 
-	for ( int i = 0 ; i < this->length ; i++ ) {
+	for (unsigned int i = 0 ; i < this->length ; i++ ) {
 		coordinates[i] = ff->sum(coordinates[i], vector->getCoordinate(i));
 	}
 
@@ -156,7 +156,7 @@ FiniteFieldVector* FiniteFieldVector::scalarMultiply(int c) {
 
 	FiniteFieldVector *out = new FiniteFieldVector(getLength(), ff);
 
-	for ( int i = 0 ; i < this->length ; i++ ) {
+	for ( unsigned int i = 0 ; i < this->length ; i++ ) {
 		out->setCoordinate(i, ff->mul(coordinates[i], c) );
 	}
 	return out;
@@ -164,7 +164,7 @@ FiniteFieldVector* FiniteFieldVector::scalarMultiply(int c) {
 
 
 void FiniteFieldVector::scalarMultiplyInPlace(int c) {
-	for ( int i = 0 ; i < this->length ; i++ ) {
+	for ( unsigned int i = 0 ; i < this->length ; i++ ) {
 		coordinates[i] = ff->mul(coordinates[i],c);
 	}
 }
@@ -178,7 +178,7 @@ FiniteFieldVector* FiniteFieldVector::multiplyAndAdd(int c, FiniteFieldVector* o
 
 	FiniteFieldVector* out = new FiniteFieldVector(getLength(), ff);
 
-	for ( int i = 0 ; i < this->length ; i++ ) {
+	for (unsigned int i = 0 ; i < this->length ; i++ ) {
 		out->setCoordinate(i, ff->sum(ff->mul(other->getCoordinate(i),c), coordinates[i]) );
 	}
 
@@ -193,7 +193,7 @@ void FiniteFieldVector::multiplyAndAddInPlace(int c, FiniteFieldVector* other) {
 	assert(other->getFiniteField()->getCardinality() == ff->getCardinality());
 	assert(other->length == this->length);
 
-	for ( int i = 0 ; i < this->length ; i++ ) {
+	for (unsigned int i = 0 ; i < this->length ; i++ ) {
 		coordinates[i] = ff->sum( ff->mul(other->getCoordinate(i), c), coordinates[i]);
 	}
 
@@ -202,7 +202,7 @@ void FiniteFieldVector::multiplyAndAddInPlace(int c, FiniteFieldVector* other) {
 // TODO: implement osstring method
 std::string FiniteFieldVector::toString() {
 		std::string ret;
-		for ( int i = 0 ; i < this->length ; i++ ) {
+		for (unsigned int i = 0 ; i < this->length ; i++ ) {
 				std::ostringstream oss;
 				oss << std::setfill ('0') << std::setw (2);
 				oss << coordinates[i];

@@ -17,7 +17,7 @@
  * d that over which the vectors in the packet are
  * defined
  */
-CodedPacket::CodedPacket( UncodedPacket* packet, int max_packets, FiniteField* ff) {
+CodedPacket::CodedPacket( UncodedPacket* packet, unsigned int max_packets, FiniteField* ff) {
 
 	this->coding_vector = new FiniteFieldVector(max_packets, ff) ;
 	this->payload_vector = ff->byteToVector(packet->getPayload(), packet->getPayloadLength() , 0);
@@ -137,7 +137,7 @@ FiniteField* CodedPacket::getFiniteField() {
  * @param index the index of the coordinate that must be set
  * @param value an element of the field over which the packet is defined
  */
-void CodedPacket::setCoordinate(int index, int value) {
+void CodedPacket::setCoordinate(unsigned int index, int value) {
 
 	assert( index >= 0);
 	assert(value < getFiniteField()->getCardinality() && value >= 0);
@@ -160,7 +160,7 @@ void CodedPacket::setCoordinate(int index, int value) {
  * @param index the index of the coordinate that must be retrieved
  * @return the value of the coordinate, an element of the field over which the packet is defined
  */
-int CodedPacket::getCoordinate(int index) {
+int CodedPacket::getCoordinate(unsigned int index) {
 
 	assert(index >= 0);
 

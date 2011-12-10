@@ -124,7 +124,7 @@ FiniteFieldVector* PacketDecoder::decodePayload(FiniteFieldVector* encoding) {
 
 	//int[] coordinates = encoding.coordinates;
 
-	for (int codedPacketId = 0; codedPacketId < encoding->getLength(); codedPacketId++) {
+	for (unsigned int codedPacketId = 0; codedPacketId < encoding->getLength(); codedPacketId++) {
 
 		int coeff = encoding->getCoordinate(codedPacketId); // coordinates[codedPacketId];
 
@@ -138,7 +138,7 @@ FiniteFieldVector* PacketDecoder::decodePayload(FiniteFieldVector* encoding) {
 		//int[] coordinates2 = codedPayload.coordinates;
 
 		/* linearly combine the payload of packet "codedPacketId" */
-		for (int c = 0; c < codedPayload->getLength(); c++) {
+		for (unsigned int c = 0; c < codedPayload->getLength(); c++) {
 			int v2 = codedPayload->getCoordinate(c); //coordinates2[c];
 			int v1 = decodedPayload->getCoordinate(c); //coordinates3[c];
 			int val = ff->sum(v1, ff->mul(coeff, v2));
@@ -161,7 +161,7 @@ FiniteFieldVector* PacketDecoder::decodePayload(FiniteFieldVector* encoding) {
  *
  * @return the number of packets that can be combined at most
  */
-int PacketDecoder::getMaxPackets() {
+unsigned int PacketDecoder::getMaxPackets() {
 	return codingVectorDecoder->getMaxPackets();
 }
 

@@ -10,7 +10,6 @@
 
 #include <iostream>
 
-// TODO: DISTRUTTORI VARI!!!!
 
 int ipow(int base, int exp);
 
@@ -26,7 +25,6 @@ class FiniteField {
 		static FiniteField* getDefaultFiniteField();
 
 
-		// TODO: create sub() sum() div() mul() and keep var private
 		int sum(int a, int b);
 		int sub(int a, int b);
 		int div(int a, int b);
@@ -46,9 +44,9 @@ class FiniteField {
 		void vectorToBytes (FiniteFieldVector* vector, unsigned char* output, int start);
 		void writeBits(unsigned char* data, int offset, int field, int value, int fieldSize);
 
-		int bytesLength(int coordinates_count);
-		int bitsPerCoordinate();
-		int coordinatesCount(int bytes_length);
+		unsigned int bytesLength(int coordinates_count);
+		unsigned int bitsPerCoordinate();
+		unsigned int coordinatesCount(int bytes_length);
 		int getCardinality();
 
 	private:
@@ -89,16 +87,16 @@ class FiniteFieldVector {
 
 	public:
 
-		FiniteFieldVector(int len, FiniteField* ff);
-		FiniteFieldVector(int coords[], int len, FiniteField* field);
+		FiniteFieldVector(unsigned int len, FiniteField* ff);
+		FiniteFieldVector(int coords[], unsigned int len, FiniteField* field);
 		~FiniteFieldVector();
 
 
-		int getLength();
+		unsigned int getLength();
 		FiniteField* getFiniteField();
 
-		void setCoordinate(int index, int value);
-		int getCoordinate(int index);
+		void setCoordinate(unsigned int index, int value);
+		int getCoordinate(unsigned int index);
 		void setToZero();
 
 		FiniteFieldVector* copy();
@@ -117,7 +115,7 @@ class FiniteFieldVector {
 
 	private:
 		int *coordinates;
-		int length;
+		unsigned int length;
 		FiniteField* ff ;
 
 
@@ -130,16 +128,15 @@ class UncodedPacket {
 
 		static UncodedPacket wrap(int id, unsigned char *payload, int length);
 
-		UncodedPacket(int id, unsigned char *payload_vector, int length);
+		UncodedPacket(int id, unsigned char *payload_vector, unsigned int length);
 		UncodedPacket(int id, FiniteFieldVector* vector);
-		// TODO
 		~UncodedPacket();
 
 		int getId();
 		unsigned char* getPayload();
 		void setPayload(unsigned char* newpayload, int newlenght );
 
-		int getPayloadLength();
+		unsigned int getPayloadLength();
 		UncodedPacket* copy();
 
 		//TODO operator:=
@@ -151,7 +148,7 @@ class UncodedPacket {
 
 		int id;
 		unsigned char* payload;
-		int payload_length;
+		unsigned int payload_length;
 		UncodedPacket(int id);
 
 
@@ -164,7 +161,7 @@ class CodedPacket {
 	public:
 
 		CodedPacket(FiniteFieldVector* codingVector, FiniteFieldVector* payloadVector);
-		CodedPacket(UncodedPacket* packet, int maxPackets, FiniteField* ff);
+		CodedPacket(UncodedPacket* packet,unsigned int maxPackets, FiniteField* ff);
 		//CodedPacket(int maxPackets, int payloadByteLen, FiniteField* ff);
 		CodedPacket(const CodedPacket& p);
 
@@ -178,8 +175,8 @@ class CodedPacket {
 		FiniteFieldVector* getPayloadVector();
 		FiniteField* getFiniteField();
 
-		void setCoordinate(int index, int value);
-		int getCoordinate(int index);
+		void setCoordinate(unsigned int index, int value);
+		int getCoordinate(unsigned int index);
 
 		//TODO: add a copy constructor?
 		CodedPacket* copy();
@@ -220,7 +217,7 @@ class LinearDependantException {
 class CodingVectorDecoder {
 
 	public:
-		CodingVectorDecoder(int maxPackets, FiniteField* ff);
+		CodingVectorDecoder(unsigned int maxPackets, FiniteField* ff);
 		~CodingVectorDecoder();
 		CodingVectorDecoder(const CodingVectorDecoder& other);
 
@@ -228,7 +225,7 @@ class CodingVectorDecoder {
 
 		CodingVectorDecoder* copy();
 
-		int getMaxPackets();
+		unsigned int getMaxPackets();
 		int getSubspaceSize();
 
 		std::map<int, FiniteFieldVector*> addVector(FiniteFieldVector* v) throw(LinearDependantException);
@@ -255,12 +252,12 @@ class CodingVectorDecoder {
 
 		/** stores the number of non-zero lines in the decode matrix ( the number
 		 * of packets that have been received */
-		int packetCount;
+		unsigned int packetCount;
 
 		/*
 		 * maxPackets the length of the vectors have to be decoded
 		 */
-		int decodeMatrixLenght;
+		unsigned int decodeMatrixLenght;
 
 		/** the finite field that is used in this decoder */
 		FiniteField* ff;
@@ -291,7 +288,7 @@ class PacketDecoder {
 		PacketDecoder& operator= (const PacketDecoder & p);
 
 		int getSubspaceSize();
-		int getMaxPackets();
+		unsigned int getMaxPackets();
 		std::vector<UncodedPacket*> addPacket(CodedPacket* p);
 
 	private:
@@ -300,7 +297,7 @@ class PacketDecoder {
 		std::vector<CodedPacket*> packets;// = new Vector<CodedPacket>();
 
 		CodingVectorDecoder* codingVectorDecoder;
-		int payloadCoordinatesCount;
+		unsigned int payloadCoordinatesCount;
 		FiniteField* ff;
 
 

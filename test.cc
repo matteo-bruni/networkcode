@@ -18,8 +18,8 @@ void test_coding_vectors();
 int main() {
 
 	//test_vectors();
-	test_coding_vectors();
-	//block_level_example();
+	//test_coding_vectors();
+	block_level_example();
 
 
 	return 0;
@@ -126,14 +126,14 @@ void block_level_example(){
 		//printUncodedPackets(packets, payloadLen);
 		//std::cout<< packets.size()<<std::endl;
 		std::cout<< "Recived packets: "<<i<< ". Decoded packets thanks this reception:" <<std::endl;
-		for (int j=0; j<packets.size(); j++) {
+		for (unsigned int j=0; j<packets.size(); j++) {
 			std::cout<< "	Packet: "<< packets[j]->toString()<< std::endl;
 
 			// save decoded packets for later use
 			decoded_packets.push_back(packets[j]->copy());
 
 		}
-		for (int j=0; j<packets.size(); j++) {
+		for (unsigned int j=0; j<packets.size(); j++) {
 			// clear memory from temp pointers
 			delete packets[j];
 
@@ -155,55 +155,6 @@ void block_level_example(){
 
 }
 
-void test_coding_vectors(){
-
-    FiniteField* ff = new FiniteField(2,4);
-
-
-	FiniteFieldVector* coding_vector = new FiniteFieldVector(1, ff);
-
-	coding_vector->setCoordinate(0,5);
-
-	std::cout<< " vector representation: " <<std::endl;
-
-	std::cout << coding_vector->toString() <<std::endl;
-
-	unsigned char* coding_vector_bytes = ff->vectorToBytes(coding_vector);
-	int cv_byte_len = ff->bytesLength(coding_vector->getLength());
-
-	std::cout<< " vector to byte representation: " <<std::endl;
-    printf("Hex representation \n <  ");
-    for ( int i=0 ; i<cv_byte_len; i++){
-    	if ( i == cv_byte_len - 1){
-        	printf(" %x >", coding_vector_bytes[i]);
-    	} else {
-        	printf(" %x, ", coding_vector_bytes[i]);
-    	}
-
-    }
-    printf("\n\n");
-
-
-	std::cout<< " Get back the original vector" <<std::endl;
-
-	FiniteFieldVector* back = ff->byteToVector(coding_vector_bytes, cv_byte_len);
-
-	std::cout<< " wrong vector: " <<std::endl;
-
-	std::cout<< back->toString() <<std::endl;
-
-	std::cout<< " right vector: " <<std::endl;
-
-	FiniteFieldVector* back_cv = ff->byteToCodingVector(coding_vector_bytes, cv_byte_len);
-
-	std::cout<< back_cv->toString() <<std::endl;
-
-
-	delete back_cv;
-	delete back;
-	delete coding_vector;
-	delete ff;
-}
 
 void test_vectors(){
 	/*
@@ -249,7 +200,7 @@ void test_vectors(){
 
 
     printf(" vector elements: \n <  ");
-    for ( int i=0 ; i<vector->getLength(); i++){
+    for (unsigned int i=0 ; i<vector->getLength(); i++){
     	if ( i == vector->getLength()-1 ){
     		std::cout << std::bitset<4>(vector->getCoordinate(i))<< " >" << std::endl;
     	} else {

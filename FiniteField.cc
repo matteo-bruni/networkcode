@@ -211,14 +211,14 @@ int FiniteField::mul(int a, int b){
  */
 FiniteFieldVector* FiniteField::byteToVector(unsigned char *bytes, int bytes_lenght, int offset) {
 
-	int coordinates = coordinatesCount(bytes_lenght);
+	unsigned int coordinates = coordinatesCount(bytes_lenght);
 	//return byteToVector(bytes, bytes_lenght, coordinatesCount(bytes_lenght));
 
 	int *data = new int[coordinates];
 
 	int bits_per_field = bitsPerCoordinate();
 
-	for ( int i = 0 ; i < coordinates; i++) {
+	for (unsigned int i = 0 ; i < coordinates; i++) {
 		data[i] = readBits(bytes, bytes_lenght, offset, i, bits_per_field);
 	}
 
@@ -268,9 +268,9 @@ void  FiniteField::vectorToBytes (FiniteFieldVector* vector, unsigned char* outp
 
 	//int[] coordinates = vector.coordinates;
 
-	int bits_per_field = bitsPerCoordinate();
+	unsigned int bits_per_field = bitsPerCoordinate();
 
-	for ( int i = 0 ; i < vector->getLength(); i++) {
+	for (unsigned int i = 0 ; i < vector->getLength(); i++) {
 		writeBits(output, start, i, vector->getCoordinate(i), bits_per_field);
 	}
 
@@ -316,13 +316,13 @@ void FiniteField::writeBits(unsigned char* data, int offset, int field, int valu
  * @param coordinatesCount  the number of
  * @return the number of bytes
  */
-int FiniteField::bytesLength(int coordinates_count) {
+unsigned int FiniteField::bytesLength(int coordinates_count) {
 
 	int bits_per_coordinate = bitsPerCoordinate();
 
 	//return (int) Math.ceil(((double) (coordinates_count * bits_per_coordinate)) / 8.0);
 
-	return int(ceil((coordinates_count * bits_per_coordinate)/ 8.0)  );
+	return (unsigned int)(ceil((coordinates_count * bits_per_coordinate)/ 8.0)  );
 }
 
 
@@ -333,7 +333,7 @@ int FiniteField::bytesLength(int coordinates_count) {
  * @return the number of bits necessary to store a field element
  */
 
-int FiniteField::bitsPerCoordinate() {
+unsigned int FiniteField::bitsPerCoordinate() {
 
 	//int bitsPerCoordinate = (int) Math.ceil(Math.log(Q) / Math.log(2));
 
@@ -351,9 +351,9 @@ int FiniteField::bitsPerCoordinate() {
  * @param bytesLength the number of bytes
  * @return the number of bytes
  */
-int FiniteField::coordinatesCount(int bytes_length) {
+unsigned int FiniteField::coordinatesCount(int bytes_length) {
 
-	int bits_per_coordinate = bitsPerCoordinate();
+	unsigned int bits_per_coordinate = bitsPerCoordinate();
 
 	return bytes_length * 8 / bits_per_coordinate;
 
