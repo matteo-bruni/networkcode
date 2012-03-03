@@ -98,7 +98,7 @@ std::vector<UncodedPacket*> PacketDecoder::addPacket(CodedPacket* p) {
 
 		std::map<int, FiniteFieldVector*> decoded = codingVectorDecoder->addVector(p->getCodingVector());
 
-		/* add the current packet only if it was linearly independant, this
+		/* add the current packet only if it was linearly independent, this
 		 will be used to decode future packets*/
 		this->packets.push_back(p);
 		//packets.add(p);

@@ -190,7 +190,7 @@ FiniteField::FiniteField(int total_size) {
 	for (int b = 0 ; b < Q ; b++) {
 			for (int i = 0 ; i < Q ; i++) {
 				_sum[b][i] = (b+i) % Q;
-				_sub[b][i] = (b-i+Q) % Q;
+				_sub[b][i] = (b-i) % Q;
 				_mul[b][i] = (b * i) % Q;
 				_div[b][i] = (b * inverse[i]) % Q;
 			}

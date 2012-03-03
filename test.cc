@@ -48,7 +48,7 @@ void test_coding_vectors();
 
 int main() {
 
-	//test_vectors();
+	test_vectors();
 	//test_coding_vectors();
 	block_level_example();
 
@@ -75,6 +75,8 @@ void block_level_example(){
 
 	int blockNumber = 10;
 	int payloadLen = 10;
+
+
 	//int payloadLenCoeffs = 20;
 
 
@@ -96,8 +98,6 @@ void block_level_example(){
 	}
 
 
-
-
 	/* prepare the input packets to be sent on the network */
 	std::vector<CodedPacket*> codewords;
 	codewords.reserve(blockNumber); //= new CodedPacket[blockNumber];
@@ -111,7 +111,6 @@ void block_level_example(){
 		std::cout<< "Packet: " << i << ": "<< codewords[i]->toString()<< std::endl;
 
 	}
-
 
 
 	/* create a set of linear combinations that simulate
